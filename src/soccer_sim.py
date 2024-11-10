@@ -4,7 +4,7 @@ import webbrowser
 from src.drawing import *
 from src.geometry_utils import calculate_line_equation
 from PIL import Image, ImageTk
-
+import os
 class SoccerFieldSimulator(tk.Tk):
     def __init__(self, client):
         super().__init__()
@@ -121,10 +121,22 @@ class SoccerFieldSimulator(tk.Tk):
         button = tk.Button(self.control_frame, text="Formules", command=self.create_formula_window, bg="#8e44ad", fg="white", font=("Arial", 10, "bold"))
         button.grid(row=8, column=0, sticky="ew", pady=5)
 
+
+
     def add_image(self):
         """Ajoute une image en bas de la colonne 2."""
+        # Chemin relatif vers les images
+        logo_path = os.path.join(os.path.dirname(__file__), "img", "Logo_tr.png")
+        amicales_path = os.path.join(os.path.dirname(__file__), "les_amicales.png")
+
+        # Vérifier l'existence des fichiers
+        if not os.path.exists(logo_path):
+            print(f"Image not found: {logo_path}")
+            return
+        
+
         # Charger l'image avec PIL
-        original_image = Image.open("src/img/Logo_tr.png")
+        original_image = Image.open(logo_path)
         
         # Redimensionner l'image
         resized_image = original_image.resize((150, 150), Image.Resampling.LANCZOS)  # Ajustez les dimensions selon vos besoins
@@ -138,8 +150,6 @@ class SoccerFieldSimulator(tk.Tk):
 
         # Charger et redimensionner l'image "les_amicales.png"
         
-        # Créer un label avec l'image redimensionnée
-       
 
     def on_resize(self, event):
         """Met à jour les éléments statiques lors du redimensionnement."""
