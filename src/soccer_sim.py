@@ -29,6 +29,11 @@ class SoccerFieldSimulator(tk.Tk):
         self.control_frame = tk.Frame(self, bg="#34495e", padx=10, pady=10)
         self.control_frame.grid(row=0, column=1, sticky="ns", padx=10, pady=10)
 
+        # Créer un style personnalisé pour les boutons
+        self.style = ttk.Style(self)
+        self.style.configure("TButton", background="#2980b9", foreground="#000000", font=("Arial", 10, "bold"))
+        self.style.map("TButton", background=[("active", "#1f618d")])
+
         # Ajouter le bouton de redirection web
         self.create_web_button("https://robot-soccer-kit.github.io/", "Documentation", t=3)
         self.create_web_button("https://les-amicales.fr", "Les Amicales", t=4)
@@ -62,7 +67,7 @@ class SoccerFieldSimulator(tk.Tk):
         def open_web():
             webbrowser.open(url)
         
-        button = tk.Button(self.control_frame, text=button_text, command=open_web, bg="#2980b9", fg="white", font=("Arial", 10, "bold"))
+        button = ttk.Button(self.control_frame, text=button_text, command=open_web, style="TButton")
         button.grid(row=t, column=0, sticky="ew", pady=5)
 
     def create_text_area(self):
@@ -70,7 +75,7 @@ class SoccerFieldSimulator(tk.Tk):
         self.text_area = tk.Text(self.control_frame, height=10, width=30, bg="#ecf0f1", fg="#2c3e50", font=("Arial", 10))
         self.text_area.grid(row=6, column=0, sticky="ew", pady=5)
 
-        save_button = tk.Button(self.control_frame, text="Save Text", command=self.save_text, bg="#27ae60", fg="white", font=("Arial", 10, "bold"))
+        save_button = ttk.Button(self.control_frame, text="Save Text", command=self.save_text, style="TButton")
         save_button.grid(row=7, column=0, sticky="ew", pady=5)
 
     def save_text(self):
@@ -108,24 +113,24 @@ class SoccerFieldSimulator(tk.Tk):
         label.pack(padx=10, pady=10)
 
         # Ajouter un bouton de fermeture
-        close_button = tk.Button(formula_window, text="Fermer", command=formula_window.destroy, bg="#e74c3c", fg="white", font=("Arial", 12), relief=tk.RAISED)
+        close_button = ttk.Button(formula_window, text="Fermer", command=formula_window.destroy, style="TButton")
         close_button.pack(pady=10)
 
         # Ajouter un cadre pour le bouton de fermeture pour un meilleur espacement
         button_frame = tk.Frame(formula_window, bg="#ecf0f1")
         button_frame.pack(pady=10)
-        close_button = tk.Button(button_frame, text="Fermer", command=formula_window.destroy, bg="#e74c3c", fg="white", font=("Arial", 12), relief=tk.RAISED)
+        close_button = ttk.Button(button_frame, text="Fermer", command=formula_window.destroy, style="TButton")
         close_button.pack()
 
     def create_formula_button(self):
         """Crée un bouton pour ouvrir la fenêtre des formules."""
-        button = tk.Button(self.control_frame, text="Formules", command=self.create_formula_window, bg="#8e44ad", fg="white", font=("Arial", 10, "bold"))
+        button = ttk.Button(self.control_frame, text="Formules", command=self.create_formula_window, style="TButton")
         button.grid(row=8, column=0, sticky="ew", pady=5)
 
     def add_image(self):
         """Ajoute une image en bas de la colonne 2."""
         # Chemin relatif vers les images
-        logo_path = os.path.join(os.path.dirname(__file__), "img", "Logo_tr.png")
+        logo_path = os.path.join(os.path.dirname(__file__),  "img", "Logo_tr.png")
 
         # Vérifier l'existence des fichiers
         if not os.path.exists(logo_path):
