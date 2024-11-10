@@ -31,8 +31,8 @@ class SoccerFieldSimulator(tk.Tk):
 
         # Créer un style personnalisé pour les boutons
         self.style = ttk.Style(self)
-        self.style.configure("TButton", background="#2980b9", foreground="#000000", font=("Arial", 10, "bold"))
-        self.style.map("TButton", background=[("active", "#1f618d")])
+        self.style.configure("TButton", background="#2c3e50", foreground="#000000", font=("Arial", 10, "bold"))
+        self.style.map("TButton", background=[("active", "#2c3e50")])
 
         # Ajouter le bouton de redirection web
         self.create_web_button("https://robot-soccer-kit.github.io/", "Documentation", t=3)
