@@ -3,13 +3,14 @@ from tkinter import ttk, filedialog
 import webbrowser
 from src.drawing import *
 from src.geometry_utils import calculate_line_equation
+from PIL import Image, ImageTk
 
 class SoccerFieldSimulator(tk.Tk):
     def __init__(self, client):
         super().__init__()
         self.title("Soccer Field Simulator")
         self.geometry("1200x600")
-        self.configure(bg="black")
+        self.configure(bg="#2c3e50")
         
         self.client = client  # Instance du client rsk
 
@@ -24,13 +25,13 @@ class SoccerFieldSimulator(tk.Tk):
         self.canvas.grid(row=0, column=0, sticky="nsew")
 
         # Frame de contrôle (boutons et sélecteur de couleur)
-        self.control_frame = tk.Frame(self, bg="#36013f", padx=10, pady=10)
+        self.control_frame = tk.Frame(self, bg="#34495e", padx=10, pady=10)
         self.control_frame.grid(row=0, column=1, sticky="ns", padx=10, pady=10)
 
         # Ajouter le bouton de redirection web
-        self.create_web_button("https://robot-soccer-kit.github.io/", "documentation", t=3)
-        self.create_web_button("les-amicales.fr", "les amicales", t=4)
-        self.create_web_button("python.org", "python", t=5)
+        self.create_web_button("https://robot-soccer-kit.github.io/", "Documentation", t=3)
+        self.create_web_button("https://les-amicales.fr", "Les Amicales", t=4)
+        self.create_web_button("https://python.org", "Python", t=5)
 
         # Ajouter l'espace d'écriture
         self.create_text_area()
@@ -39,10 +40,13 @@ class SoccerFieldSimulator(tk.Tk):
         self.create_formula_button()
 
         # Frame pour afficher les coordonnées
-        self.coord_frame = tk.Frame(self, bg="#36013f", padx=10, pady=10)
+        self.coord_frame = tk.Frame(self, bg="#34495e", padx=10, pady=10)
         self.coord_frame.grid(row=0, column=2, sticky="ns", padx=10, pady=10)
-        self.coord_label = tk.Label(self.coord_frame, text="Coordinates:\n", bg="#36013f", fg="white", font=("Arial", 12))
+        self.coord_label = tk.Label(self.coord_frame, text="Coordinates:\n", bg="#34495e", fg="white", font=("Arial", 12))
         self.coord_label.grid(row=0, column=0, sticky="nsw")
+
+        # Ajouter l'image en bas de la colonne 2
+        self.add_image()
 
         # Liaison d'événements
         self.bind("<Configure>", self.on_resize)
@@ -57,15 +61,15 @@ class SoccerFieldSimulator(tk.Tk):
         def open_web():
             webbrowser.open(url)
         
-        button = tk.Button(self.control_frame, text=button_text, command=open_web)
+        button = tk.Button(self.control_frame, text=button_text, command=open_web, bg="#2980b9", fg="white", font=("Arial", 10, "bold"))
         button.grid(row=t, column=0, sticky="ew", pady=5)
 
     def create_text_area(self):
         """Crée un espace d'écriture et un bouton pour enregistrer le contenu."""
-        self.text_area = tk.Text(self.control_frame, height=10, width=30)
+        self.text_area = tk.Text(self.control_frame, height=10, width=30, bg="#ecf0f1", fg="#2c3e50", font=("Arial", 10))
         self.text_area.grid(row=6, column=0, sticky="ew", pady=5)
 
-        save_button = tk.Button(self.control_frame, text="Save Text", command=self.save_text)
+        save_button = tk.Button(self.control_frame, text="Save Text", command=self.save_text, bg="#27ae60", fg="white", font=("Arial", 10, "bold"))
         save_button.grid(row=7, column=0, sticky="ew", pady=5)
 
     def save_text(self):
@@ -80,7 +84,7 @@ class SoccerFieldSimulator(tk.Tk):
         formula_window = tk.Toplevel(self)
         formula_window.title("Formules")
         formula_window.geometry("600x450")
-        formula_window.configure(bg="#f0f0f0")
+        formula_window.configure(bg="#ecf0f1")
 
         # Ajouter un cadre pour les formules avec une bordure
         frame = tk.Frame(formula_window, bg="white", padx=20, pady=20, relief=tk.GROOVE, borderwidth=2)
@@ -103,23 +107,39 @@ class SoccerFieldSimulator(tk.Tk):
         label.pack(padx=10, pady=10)
 
         # Ajouter un bouton de fermeture
-        close_button = tk.Button(formula_window, text="Fermer", command=formula_window.destroy, bg="#d9534f", fg="white", font=("Arial", 12), relief=tk.RAISED)
+        close_button = tk.Button(formula_window, text="Fermer", command=formula_window.destroy, bg="#e74c3c", fg="white", font=("Arial", 12), relief=tk.RAISED)
         close_button.pack(pady=10)
 
         # Ajouter un cadre pour le bouton de fermeture pour un meilleur espacement
-        button_frame = tk.Frame(formula_window, bg="#f0f0f0")
+        button_frame = tk.Frame(formula_window, bg="#ecf0f1")
         button_frame.pack(pady=10)
-        close_button = tk.Button(button_frame, text="Fermer", command=formula_window.destroy, bg="#d9534f", fg="white", font=("Arial", 12), relief=tk.RAISED)
+        close_button = tk.Button(button_frame, text="Fermer", command=formula_window.destroy, bg="#e74c3c", fg="white", font=("Arial", 12), relief=tk.RAISED)
         close_button.pack()
-
-# Assurez-vous d'appeler cette méthode dans le constructeur de la classe SoccerFieldSimulator
-
-    
 
     def create_formula_button(self):
         """Crée un bouton pour ouvrir la fenêtre des formules."""
-        button = tk.Button(self.control_frame, text="Formules", command=self.create_formula_window)
+        button = tk.Button(self.control_frame, text="Formules", command=self.create_formula_window, bg="#8e44ad", fg="white", font=("Arial", 10, "bold"))
         button.grid(row=8, column=0, sticky="ew", pady=5)
+
+    def add_image(self):
+        """Ajoute une image en bas de la colonne 2."""
+        # Charger l'image avec PIL
+        original_image = Image.open("src\\img\\Logo_tr.png")
+        
+        # Redimensionner l'image
+        resized_image = original_image.resize((150, 150), Image.Resampling.LANCZOS)  # Ajustez les dimensions selon vos besoins
+        
+        # Convertir l'image redimensionnée en PhotoImage
+        self.logo_image = ImageTk.PhotoImage(resized_image)
+        
+        # Créer un label avec l'image redimensionnée
+        logo_label = tk.Label(self.coord_frame, image=self.logo_image, bg="#34495e")
+        logo_label.grid(row=1, column=0, sticky="s", pady=10)
+
+        # Charger et redimensionner l'image "les_amicales.png"
+        
+        # Créer un label avec l'image redimensionnée
+       
 
     def on_resize(self, event):
         """Met à jour les éléments statiques lors du redimensionnement."""
