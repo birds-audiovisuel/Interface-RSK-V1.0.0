@@ -124,7 +124,7 @@ class SoccerFieldSimulator(tk.Tk):
     def add_image(self):
         """Ajoute une image en bas de la colonne 2."""
         # Charger l'image avec PIL
-        original_image = Image.open("src\\img\\Logo_tr.png")
+        original_image = Image.open("src/img/Logo_tr.png")
         
         # Redimensionner l'image
         resized_image = original_image.resize((150, 150), Image.Resampling.LANCZOS)  # Ajustez les dimensions selon vos besoins
