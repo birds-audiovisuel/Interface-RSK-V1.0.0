@@ -2,9 +2,7 @@ import tkinter as tk
 from tkinter import ttk, filedialog
 import webbrowser
 from src.drawing import *
-
 from src.geometry_utils import calculate_line_equation
-
 
 class SoccerFieldSimulator(tk.Tk):
     def __init__(self, client):
@@ -14,7 +12,6 @@ class SoccerFieldSimulator(tk.Tk):
         self.configure(bg="black")
         
         self.client = client  # Instance du client rsk
-
 
         # Configuration de la grille
         self.grid_columnconfigure(0, weight=1)
@@ -30,19 +27,6 @@ class SoccerFieldSimulator(tk.Tk):
         self.control_frame = tk.Frame(self, bg="#36013f", padx=10, pady=10)
         self.control_frame.grid(row=0, column=1, sticky="ns", padx=10, pady=10)
 
-        #self.button1_var = tk.BooleanVar(value=True)
-        #self.button2_var = tk.BooleanVar(value=True)
-        #self.color_var = tk.StringVar(value="green")
-
-        # Widgets de contrôle
-        #self.button1 = ttk.Checkbutton(self.control_frame, text="Direction of robot", variable=self.button1_var)
-        #self.button2 = ttk.Checkbutton(self.control_frame, text="Axe of goal", variable=self.button2_var)
-        #self.color_selector = ttk.Combobox(self.control_frame, textvariable=self.color_var, values=["green", "blue"])
-
-        #self.button1.grid(row=0, column=0, sticky="ew", pady=5)
-        #self.button2.grid(row=1, column=0, sticky="ew", pady=5)
-        #self.color_selector.grid(row=2, column=0, sticky="ew", pady=5)
-
         # Ajouter le bouton de redirection web
         self.create_web_button("https://robot-soccer-kit.github.io/", "documentation", t=3)
         self.create_web_button("les-amicales.fr", "les amicales", t=4)
@@ -51,15 +35,14 @@ class SoccerFieldSimulator(tk.Tk):
         # Ajouter l'espace d'écriture
         self.create_text_area()
 
+        # Ajouter le bouton pour ouvrir la fenêtre des formules
+        self.create_formula_button()
 
         # Frame pour afficher les coordonnées
         self.coord_frame = tk.Frame(self, bg="#36013f", padx=10, pady=10)
         self.coord_frame.grid(row=0, column=2, sticky="ns", padx=10, pady=10)
         self.coord_label = tk.Label(self.coord_frame, text="Coordinates:\n", bg="#36013f", fg="white", font=("Arial", 12))
         self.coord_label.grid(row=0, column=0, sticky="nsw")
-
-        # Lecture des états des boutons
-        
 
         # Liaison d'événements
         self.bind("<Configure>", self.on_resize)
@@ -92,6 +75,34 @@ class SoccerFieldSimulator(tk.Tk):
             with open(file_path, "w") as file:
                 file.write(self.text_area.get("1.0", tk.END))
 
+    def create_formula_window(self):
+        """Crée une fenêtre affichant les formules de trigonométrie, de Pythagore et de calcul d'équation de droite."""
+        formula_window = tk.Toplevel(self)
+        formula_window.title("Formules")
+        formula_window.geometry("400x300")
+        formula_window.configure(bg="white")
+
+        formulas = (
+            "Trigonométrie:\n"
+            "sin(θ) = Opposite / Hypotenuse\n"
+            "cos(θ) = Adjacent / Hypotenuse\n"
+            "tan(θ) = Opposite / Adjacent\n\n"
+            "Pythagore:\n"
+            "a² + b² = c²\n\n"
+            "Calcul d'équation de droite:\n"
+            "y = mx + b\n"
+            "m = (y2 - y1) / (x2 - x1)\n"
+            "b = y1 - m * x1\n"
+        )
+
+        label = tk.Label(formula_window, text=formulas, bg="white", font=("Arial", 12))
+        label.pack(padx=10, pady=10)
+
+    def create_formula_button(self):
+        """Crée un bouton pour ouvrir la fenêtre des formules."""
+        button = tk.Button(self.control_frame, text="Formules", command=self.create_formula_window)
+        button.grid(row=8, column=0, sticky="ew", pady=5)
+
     def on_resize(self, event):
         """Met à jour les éléments statiques lors du redimensionnement."""
         draw_static_elements(self.canvas)
@@ -118,17 +129,14 @@ class SoccerFieldSimulator(tk.Tk):
             f"Robot green2: ({robot2_pos[0]:.2f}, {robot2_pos[1]:.2f})\n"
             f"Robot blue1: ({robot3_pos[0]:.2f}, {robot3_pos[1]:.2f})\n"
             f"Robot blue2: ({robot4_pos[0]:.2f}, {robot4_pos[1]:.2f})\n"
-            f"Half Line Equation of green 1: {self.calculate_half_line_equation(robot1_pos, ball_pos)}\n"
             f"Score: {score1} - {score2}\n"
-            
         )
         self.coord_label.config(text=display_text, font=("Arial", 12))
 
     def update_field(self):
         self.update_coordinates_display(self.client.ball, self.client.green1.position, self.client.green2.position, self.client.blue1.position, self.client.blue2.position, self.client.referee['teams']['green']['score'], self.client.referee['teams']['blue']['score'])
-        draw_dynamic_elements(self.canvas, self.client,)
+        draw_dynamic_elements(self.canvas, self.client)
         self.after(100, self.update_field)  # Répète la mise à jour toutes les 100ms
-
 
     def convert_coords(self, x, y, to_canvas=False):
         """Convertit les coordonnées du terrain à celles du canvas, et inversement."""
@@ -142,4 +150,3 @@ class SoccerFieldSimulator(tk.Tk):
         """Calcule le facteur d'échelle en fonction de la taille du canvas."""
         width, height = self.canvas.winfo_width(), self.canvas.winfo_height()
         return min(width, height) / 2
-
