@@ -79,8 +79,12 @@ class SoccerFieldSimulator(tk.Tk):
         """Crée une fenêtre affichant les formules de trigonométrie, de Pythagore et de calcul d'équation de droite."""
         formula_window = tk.Toplevel(self)
         formula_window.title("Formules")
-        formula_window.geometry("400x300")
-        formula_window.configure(bg="white")
+        formula_window.geometry("600x450")
+        formula_window.configure(bg="#f0f0f0")
+
+        # Ajouter un cadre pour les formules avec une bordure
+        frame = tk.Frame(formula_window, bg="white", padx=20, pady=20, relief=tk.GROOVE, borderwidth=2)
+        frame.pack(padx=20, pady=20, fill=tk.BOTH, expand=True)
 
         formulas = (
             "Trigonométrie:\n"
@@ -95,8 +99,22 @@ class SoccerFieldSimulator(tk.Tk):
             "b = y1 - m * x1\n"
         )
 
-        label = tk.Label(formula_window, text=formulas, bg="white", font=("Arial", 12))
+        label = tk.Label(frame, text=formulas, bg="white", font=("Arial", 14), justify=tk.LEFT)
         label.pack(padx=10, pady=10)
+
+        # Ajouter un bouton de fermeture
+        close_button = tk.Button(formula_window, text="Fermer", command=formula_window.destroy, bg="#d9534f", fg="white", font=("Arial", 12), relief=tk.RAISED)
+        close_button.pack(pady=10)
+
+        # Ajouter un cadre pour le bouton de fermeture pour un meilleur espacement
+        button_frame = tk.Frame(formula_window, bg="#f0f0f0")
+        button_frame.pack(pady=10)
+        close_button = tk.Button(button_frame, text="Fermer", command=formula_window.destroy, bg="#d9534f", fg="white", font=("Arial", 12), relief=tk.RAISED)
+        close_button.pack()
+
+# Assurez-vous d'appeler cette méthode dans le constructeur de la classe SoccerFieldSimulator
+
+    
 
     def create_formula_button(self):
         """Crée un bouton pour ouvrir la fenêtre des formules."""
