@@ -1,6 +1,6 @@
 from src.geometry_utils import *
 from math import *
-
+import rsk
 def draw_static_elements(canvas):
     """Dessine les éléments statiques du terrain de football."""
     canvas.delete("static")
@@ -98,39 +98,46 @@ def draw_half_line_from_green1_to_ball(client,canvas, green1_position, ball_posi
     canvas.create_line(x1_canvas, y1_canvas, x2_canvas, y2_canvas, fill="red", width=2, tags="dynamic")
 
 
-def draw_dynamic_elements(canvas, client, ):
+def draw_dynamic_elements(canvas, client):
     """Dessine les éléments dynamiques (robots, ballon, etc.)"""
     canvas.delete("dynamic")
     
-    
     ball_position = client.ball
     robots = [client.green1, client.green2, client.blue1, client.blue2]
-    i=0
+    i = 0
     
     # Dessin des éléments dynamiques
     for robot in robots:
-        i+=1
-        if i<3 :
-            fill="#00FF10"  
-            outline="black"
+        i += 1
+        if i < 3:
+            fill = "#00FF10"  
+            outline = "black"
         else:
-            fill="blue"
-            outline="white"
+            fill = "blue"
+            outline = "white"
         x, y = robot.position
-        canvas.create_oval(convert_coords(x - 0.05, y - 0.05, canvas, True), 
-                           convert_coords(x + 0.05, y + 0.05, canvas, True), 
-                           outline=outline, fill=fill, tags="dynamic")
+        robot_radius = rsk.constants.robot_radius
+        canvas.create_oval(convert_coords(x - robot_radius, y - robot_radius, canvas, True), 
+                           convert_coords(x + robot_radius, y + robot_radius, canvas, True), 
+                           outline = outline, fill = fill, tags = "dynamic")
+        
+        # Dessin du trait devant le robot suivant son orientation
+        orientation = robot.orientation
+        line_length = 0.1  # Longueur du trait devant le robot
+        x_end = x + line_length * cos(orientation)
+        y_end = y + line_length * sin(orientation)
+        canvas.create_line(convert_coords(x, y, canvas, True), 
+                           convert_coords(x_end, y_end, canvas, True), 
+                           fill = "#FF69B4", width = 2, tags = "dynamic")  # Couleur rose fluo
 
     # Dessin de la balle
     x, y = ball_position
-    canvas.create_oval(convert_coords(x - 0.02, y - 0.02, canvas, True), 
-                       convert_coords(x + 0.02, y + 0.02, canvas, True), 
-                       outline="orange", fill="orange", tags="dynamic")
+    ball_radius = rsk.constants.ball_radius
+    canvas.create_oval(convert_coords(x - ball_radius, y - ball_radius, canvas, True), 
+                       convert_coords(x + ball_radius, y + ball_radius, canvas, True), 
+                       outline = "orange", fill = "orange", tags = "dynamic")
     
     # Dessin de la demi-droite
-    draw_half_line_from_green1_to_ball(client,canvas, client.green1.position, ball_position,[client.blue1.position, client.blue2.position])
-    draw_half_line_from_green1_to_ball(client,canvas, client.blue1.position, ball_position,[client.green1.position, client.green2.position])
+    draw_half_line_from_green1_to_ball(client, canvas, client.green1.position, ball_position, [client.blue1.position, client.blue2.position])
+    draw_half_line_from_green1_to_ball(client, canvas, client.blue1.position, ball_position, [client.green1.position, client.green2.position])
 
-    
-    # Dessin de l'alerte si un but peut être marqué
-   

@@ -47,7 +47,7 @@ def calculate_half_line_equation(point1, point2):
     # Vérifier si la droite est verticale (x1 == x2)
     if x1 == x2:
         return None  # La pente est infinie pour une droite verticale
-
+ 
     # Calcul de la pente (a)
     a = (y2 - y1) / (x2 - x1)
 
