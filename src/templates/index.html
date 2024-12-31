@@ -1,24 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soccer Field Simulator</title>
+    <title>Simulateur de Terrain de Football</title>
     <style>
         body {
             display: flex;
             flex-direction: column;
             align-items: center;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #ffffff;
             margin: 0;
             padding: 20px;
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         h1 {
-            color: #343a40;
+            color: #00d4ff;
             margin-bottom: 20px;
-            font-size: 2.5em;
+            font-size: 3em;
             text-align: center;
+            animation: slideInFromTop 1s ease-in-out;
+            
+        }
+        @keyframes slideInFromTop {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
         .container {
             display: flex;
@@ -27,21 +39,28 @@
             gap: 20px;
             width: 100%;
             max-width: 1400px;
+            animation: fadeIn 1.5s ease-in-out;
         }
         canvas {
-            background-color: #28a745;
-            border: 2px solid #343a40;
+            background-color: #005800;
+            border: 2px solid #00d4ff;
             border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 20px #00d4ff;
+            animation: zoomIn 1s ease-in-out;
+        }
+        @keyframes zoomIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
         #controls {
             display: flex;
             flex-direction: column;
             align-items: center;
-            background-color: #ffffff;
+            background: rgba(255, 255, 255, 0.1);
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 20px #00d4ff;
+            animation: fadeIn 2s ease-in-out;
         }
         #controls button {
             margin: 10px 0;
@@ -49,33 +68,129 @@
             font-size: 16px;
             border: none;
             border-radius: 5px;
-            background-color: #007bff;
+            background: linear-gradient(135deg, #00d4ff, #007bff);
             color: white;
             cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.3s ease;
+            transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         #controls button:hover {
-            background-color: #0056b3;
-            transform: scale(1.05);
+            background: linear-gradient(135deg, #007bff, #00d4ff);
+            transform: scale(1.1);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
         }
         #coordinates, #ballCoordinates, #robotCoordinates {
             margin-top: 10px;
             font-size: 14px;
-            color: #343a40;
+            color: #00d4ff;
             text-align: center;
+            animation: fadeIn 2.5s ease-in-out;
+        }
+        #mathFormulasButton {
+            margin: 10px 0;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background: linear-gradient(135deg, #00d4ff, #007bff);
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+        #mathFormulasButton:hover {
+            background: linear-gradient(135deg, #007bff, #00d4ff);
+            transform: scale(1.1);
+        }
+        #mathFormulasModal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+            animation: fadeIn 0.5s ease-in-out;
+            backdrop-filter: blur(5px);
+        }
+        #mathFormulasContent {
+            background-color: rgba(255, 255, 255, 0.1);
+            margin: 10% auto;
+            padding: 20px;
+            border: 2px solid #00d4ff;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+            color: #ffffff;
+            box-shadow: 0 0 20px #00d4ff;
+            animation: slideInFromBottom 0.5s ease-in-out;
+        }
+        @keyframes slideInFromBottom {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        #mathFormulasContent ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #mathFormulasContent li {
+            margin: 10px 0;
+            font-size: 1.2em;
+        }
+        #mathFormulasContent code {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 5px;
+            border-radius: 5px;
+        }
+        #closeModal {
+            color: #00d4ff;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        #closeModal:hover,
+        #closeModal:focus {
+            color: #ffffff;
+            text-decoration: none;
+        }
+        a {
+            color: #00d4ff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        a:hover {
+            color: #007bff;
         }
     </style>
 </head>
 <body>
-    <h1>Soccer Field Simulator</h1>
+    <h1>Simulateur de Terrain de Football</h1>
     <div class="container">
         <canvas id="soccerField" width="1200" height="600"></canvas>
         <div id="controls">
-            <button id="deselectRobotButton">Deselect Robot</button>
+            <button id="deselectRobotButton">Désélectionner le Robot</button>
             <button id="goToLesAmicalesButton">Les Amicales</button>
-            <div id="coordinates">Coordinates: (0, 0)</div>
-            <div id="ballCoordinates">Ball Coordinates: (0, 0)</div>
+            <button id="mathFormulasButton">Formules Mathématiques</button>
+            <button id="resetRobotsButton">Réinitialiser les Robots</button>
+            <div id="coordinates">Coordonnées : (0, 0)</div>
+            <div id="ballCoordinates">Coordonnées du Ballon : (0, 0)</div>
             <div id="robotCoordinates"></div>
+        </div>
+    </div>
+    <div id="mathFormulasModal">
+        <div id="mathFormulasContent">
+            <span id="closeModal">&times;</span>
+            <h2>Formules Mathématiques pour le Plan 2D</h2>
+            <ul>
+                <li>Distance entre deux points : <br><code>d = sqrt((x2 - x1)^2 + (y2 - y1)^2)</code></li>
+                <li>Milieu d'un segment de ligne : <br><code>M = ((x1 + x2) / 2, (y1 + y2) / 2)</code></li>
+                <li>Pente d'une ligne : <br><code>m = (y2 - y1) / (x2 - x1)</code></li>
+                <li>Équation d'une ligne : <br><code>y = mx + b</code></li>
+                <li>Surface d'un triangle : <br><code>A = (1 / 2) * | x1(y2 - y3) + x2(y3 - y1) + x3(y1 - y2) |</code></li>
+                <li>Équation d'un cercle : <br><code>(x - h)^2 + (y - k)^2 = r^2</code></li>
+            </ul>
         </div>
     </div>
     <script>
@@ -154,8 +269,12 @@
                 ctx.moveTo(...convertCoords(x, -0.6, true));
                 ctx.lineTo(...convertCoords(x, 0.6, true));
                 ctx.stroke();
-                if (Math.abs(x % 0.5) < 0.01) {
-                    ctx.fillText(x.toFixed(1), ...convertCoords(x, -0.65, true));
+                
+            }
+            for (let x= -1;x<=1;x+=0.5){
+                if (Math.abs(x % 0.5) < 0.5) {
+                    ctx.fillText(x.toFixed(1), ...convertCoords(x-0.03, -0.7, true));
+                    
                 }
             }
             for (let y = -0.6; y <= 0.6; y += 0.1) {
@@ -184,7 +303,7 @@
             // Draw the ball
             const ball = client.ball;
             drawCircle(ball[0], ball[1], 0.05, 'orange');
-            ballCoordinatesDisplay.textContent = `Ball Coordinates: (${ball[0].toFixed(2)},${ball[1].toFixed(2)})`;
+            ballCoordinatesDisplay.textContent = `Coordonnées du Ballon : (${ball[0].toFixed(2)},${ball[1].toFixed(2)})`;
 
             // Draw robots
             const robots = [
@@ -194,7 +313,7 @@
                 { color: 'blue', id: 2, pose: client.robot.blue[2].pose }
             ];
 
-            let robotCoordinatesText = 'Robot Coordinates:<br>';
+            let robotCoordinatesText = 'Coordonnées des Robots:<br>';
             robots.forEach(robot => {
                 const [x, y, orientation] = robot.pose;
                 const color = robot.color === 'green' ? '#7CFC00' : 'blue';  // Lighter green for green robots
@@ -227,7 +346,7 @@
                     client = data; // Update client data from server
                     updateField(client);
                 })
-                .catch(error => console.error('Error fetching latest positions:', error));
+                .catch(error => console.error('Erreur lors de la récupération des dernières positions:', error));
         }
 
         function updateField(client) {
@@ -259,11 +378,27 @@
             requestAnimationFrame(animate);
         }
 
+        function resetRobots() {
+            fetch('/reset_robots', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    fetchLatestPositions(); // Fetch the latest positions to update the field
+                }
+            })
+            .catch(error => console.error('Erreur lors de la réinitialisation des robots:', error));
+        }
+
         let selectedRobot = null;
         let lastUpdateTime = 0;
 
         function animationLoop(timestamp) {
-            if (timestamp - lastUpdateTime >= 5) { // Update every 5ms for 200 FPS
+            if (timestamp - lastUpdateTime >= 1) { // Update every 5ms for 200 FPS
                 fetchLatestPositions();
                 lastUpdateTime = timestamp;
             }
@@ -275,7 +410,7 @@
             const x = event.clientX - rect.left;
             const y = event.clientY - rect.top;
             const [fieldX, fieldY] = convertCoords(x, y);
-            coordinatesDisplay.textContent = `Coordinates: (${fieldX.toFixed(2)}, ${fieldY.toFixed(2)})`;
+            coordinatesDisplay.textContent = `Coordonnées : (${fieldX.toFixed(2)}, ${fieldY.toFixed(2)})`;
         });
 
         canvas.addEventListener('click', (event) => {
@@ -307,13 +442,13 @@
                         selectedRobot = null; // Deselect robot after moving
                     }
                 })
-                .catch(error => console.error('Error moving robot:', error));
+                .catch(error => console.error('Erreur lors du déplacement du robot:', error));
             } else {
                 // Check if a robot is clicked
                 const clickedRobot = robots.find(robot => {
                     const [rx, ry] = convertCoords(robot.pose[0], robot.pose[1], true);
                     const distance = Math.sqrt((x - rx) ** 2 + (y - ry) ** 2);
-                    return distance < 50; // Assuming 50 pixels as the clickable radius
+                    return distance < 25; // Assuming 25 pixels as the clickable radius
                 });
 
                 if (clickedRobot) {
@@ -334,7 +469,7 @@
                             updateField(client); // Update field with new ball position
                         }
                     })
-                    .catch(error => console.error('Error teleporting ball:', error));
+                    .catch(error => console.error('Erreur lors de la téléportation du ballon:', error));
                 }
             }
         });
@@ -347,6 +482,26 @@
         document.getElementById('goToLesAmicalesButton').addEventListener('click', () => {
             window.location.href = 'https://les-amicales.fr';
         });
+
+        const mathFormulasButton = document.getElementById('mathFormulasButton');
+        const modal = document.getElementById('mathFormulasModal');
+        const closeModal = document.getElementById('closeModal');
+
+        mathFormulasButton.onclick = function() {
+            modal.style.display = 'block';
+        }
+
+        closeModal.onclick = function() {
+            modal.style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        document.getElementById('resetRobotsButton').addEventListener('click', resetRobots);
 
         // Initial draw
         fetchLatestPositions();

@@ -4,6 +4,7 @@ from src.geometry_utils import calculate_line_equation
 import os
 from tkinter import filedialog
 import rsk
+import math
 
 app = Flask(__name__)
 
@@ -46,6 +47,17 @@ def move_robot():
     color, id = data['color'], data['id']
     x, y, alpha = data['x'], data['y'], data['alpha']
     client.robots[color][id].goto((x, y, alpha), wait=True)  # Move robot to (x, y, alpha)
+    return jsonify(success=True)
+
+@app.route('/reset_robots', methods=['POST'])
+def reset_robots():
+    positions = {
+        'green': {1: [0.46, 0, 180], 2: [0.92, 0, 180]},
+        'blue': {1: [-0.46, 0, 0], 2: [-0.92, 0, 0]}
+    }
+    for color, robots in positions.items():
+        for id, (x, y, alpha) in robots.items():
+            client.robots[color][id].goto((x, y, math.radians(alpha)), wait=True)
     return jsonify(success=True)
 
 @app.route('/save_text', methods=['POST'])
