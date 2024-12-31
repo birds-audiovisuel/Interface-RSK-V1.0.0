@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulateur de Terrain de Football</title>
+    <title>Simulateur Mathématique RSK</title>
     <style>
         body {
             display: flex;
@@ -172,7 +172,7 @@
             text-align: center;
             animation: fadeIn 1s ease-in-out, pulse 1s infinite;
             position: absolute;
-            bottom: 10px;
+            bottom: 60px; /* Move up by 50px */
             left: 50%;
             transform: translateX(-50%);
             width: 100%;
@@ -198,7 +198,7 @@
             text-align: center;
             animation: fadeIn 1s ease-in-out;
             position: absolute;
-            bottom: 10px;
+            bottom: 50px; /* Move up by 50px */
             left: 50%;
             transform: translateX(-50%);
             width: 100%;
@@ -266,22 +266,59 @@
             color: #ffffff;
             text-decoration: none;
         }
+        footer {
+            margin-top: 40px; /* Add more space above the footer */
+            text-align: center;
+            color: #ffffff;
+        }
+        .left-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px #00d4ff;
+            animation: fadeIn 2s ease-in-out;
+            margin-right: 20px; /* Add space between left container and main container */
+        }
+        .left-container button {
+            margin: 10px 0;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background: linear-gradient(135deg, #00d4ff, #007bff);
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .left-container button:hover {
+            background: linear-gradient(135deg, #007bff, #00d4ff);
+            transform: scale(1.1);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+        }
     </style>
 </head>
 <body>
     <header>
         
     </header>
-    <h1>Simulateur de Terrain de Football</h1>
+    <h1>Simulateur Mathématique RSK</h1>
     <div class="container">
+        <div class="left-container">
+            <button id="goToLesAmicalesButton">Les Amicales</button>
+            <button id="goToSimulateurRSKButton">Simulateur RSK</button>
+            <button id="contactButton">Contact</button> <!-- Added Contact button -->
+        </div>
         <canvas id="soccerField" width="1200" height="600"></canvas>
         <div id="controls">
             <button id="settingsButton">Menu</button>
             <button id="deselectRobotButton">Désélectionner le Robot</button>
-            <button id="goToLesAmicalesButton">Les Amicales</button>
             <button id="mathFormulasButton">Formules Mathématiques</button>
             <button id="resetRobotsButton">Réinitialiser les Robots</button>
-            <div id="coordinates">Coordonnées : (0, 0)</div>
+            <div id="coordinates">Coordonnées : (0,0)</div>
             <div id="ballCoordinates">Coordonnées du Ballon : (0, 0)</div>
             <div id="robotCoordinates"></div>
         </div>
@@ -479,7 +516,7 @@
             if (isGoal) {
                 drawCircle(0, 0, 0.1, 'red', false);
                 goalMessage.style.display = 'block';
-                goalMessage.style.left = '43%'; // Center the message relative to the field
+                goalMessage.style.left = '50%'; // Center the message relative to the field
                 goalMessage.style.color = ball[0] > 0.9 ? '#00FFFF' : '#7CFC00'; // Color based on which team scored
             } else {
                 goalMessage.style.display = 'none';
@@ -501,7 +538,7 @@
                 });
                 drawCircle(nearestPoint[0], nearestPoint[1], 0.1, 'red', false);
                 outOfBoundsMessage.style.display = 'block';
-                outOfBoundsMessage.style.left = '4%'; // Center the message relative to the field
+                outOfBoundsMessage.style.left = '13%'; // Center the message relative to the field
             } else {
                 outOfBoundsMessage.style.display = 'none';
             }
@@ -532,6 +569,10 @@
                 ctx.strokeStyle = '#FF69B4';  // Pink color
                 ctx.lineWidth = 2;
                 ctx.stroke();
+
+                ctx.fillStyle = 'white';
+                ctx.font = '20px Arial';
+                ctx.fillText(robot.id, ...convertCoords(x, y, true)); // Add robot number
 
                 robotCoordinatesText += `${robot.color} ${robot.id}: (${x.toFixed(2)}, ${y.toFixed(2)})<br>`;
             });
@@ -611,7 +652,7 @@
             const x = event.clientX - rect.left;
             const y = event.clientY - rect.top;
             const [fieldX, fieldY] = convertCoords(x, y);
-            coordinatesDisplay.textContent = `Coordonnées : (${fieldX.toFixed(2)}, ${fieldY.toFixed(2)})`;
+            coordinatesDisplay.textContent = `Coordonnées : (${fieldX.toFixed(2)},${fieldY.toFixed(2)})`;
         });
 
         canvas.addEventListener('click', (event) => {
@@ -754,6 +795,14 @@
             updateField(client);
         }
 
+        document.getElementById('goToSimulateurRSKButton').addEventListener('click', () => {
+            window.location.href = ''; // Add the link here
+        });
+
+        document.getElementById('contactButton').addEventListener('click', () => {
+            window.location.href = 'https://birds-audiovisuel.fr/contact/';
+        });
+
         // Initial draw
         fetchLatestPositions();
         requestAnimationFrame(animationLoop);
@@ -767,4 +816,5 @@
         // setInterval(fetchLatestPositions, 1000);
     </script>
 </body>
+<footer>Copyright © 2022 - 2025 Birds Audiovisuel. Tous droits réservés. Réalisé par Samuel LEGRAND.</footer>
 </html>
