@@ -17,4 +17,4 @@ jobs:
 
     - name: Start Game Controller
       run: |
-        py -m rsk.game_controller -s
+        python -m rsk.game_controller -s
