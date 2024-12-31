@@ -23,12 +23,12 @@ def update_field():
         'ball': list(client.ball),
         'robot': {
             'green': {
-                1: {'pose': list(client.robots['green'][1].pose)},
-                2: {'pose': list(client.robots['green'][2].pose)}
+                1: {'pose': list(client.robots['green'][1].pose), 'penalized': client.referee['teams']['green']['robots']['1']['penalized']},
+                2: {'pose': list(client.robots['green'][2].pose), 'penalized': client.referee['teams']['green']['robots']['2']['penalized']}
             },
             'blue': {
-                1: {'pose': list(client.robots['blue'][1].pose)},
-                2: {'pose': list(client.robots['blue'][2].pose)}
+                1: {'pose': list(client.robots['blue'][1].pose), 'penalized': client.referee['teams']['blue']['robots']['1']['penalized']},
+                2: {'pose': list(client.robots['blue'][2].pose), 'penalized': client.referee['teams']['blue']['robots']['2']['penalized']}
             }
         }
     }
