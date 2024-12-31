@@ -1,39 +1,25 @@
 from src.geometry_utils import *
-from math import *
+from math import atan2, cos, sin, sqrt
 import rsk
+
 def draw_static_elements(canvas):
     """Dessine les éléments statiques du terrain de football."""
     canvas.delete("static")
     # Lignes du terrain
     canvas.create_line(convert_coords(-1, -0.6, canvas, True), convert_coords(1, -0.6, canvas, True), fill="white", width=5, tags="static")
-    # Draw the boundaries
-    canvas.create_line(convert_coords(-1, -0.6,canvas, True),convert_coords(1, -0.6, canvas,True), fill="white", width=5, tags="static")
-    canvas.create_line(convert_coords(-1, 0.6, canvas,True), convert_coords(1, 0.6, canvas,True), fill="white", width=5, tags="static")
-    canvas.create_line(convert_coords(-1, -0.6, canvas,True),convert_coords(-1, 0.6, canvas,True), fill="white", width=5, tags="static")
-    canvas.create_line(convert_coords(1, -0.6, canvas,True), convert_coords(1, 0.6, canvas,True), fill="white", width=5, tags="static")
-    canvas.create_line(convert_coords(-1, -0.3, canvas,True), convert_coords(-0.9, -0.3, canvas,True), fill="white", width=5, tags="static")
-    canvas.create_line(convert_coords(-1, 0.3, canvas,True), convert_coords(-0.9, 0.3, canvas,True), fill="white", width=5, tags="static")
-    canvas.create_line(convert_coords(1, -0.3, canvas,True), convert_coords(0.9, -0.3, canvas,True), fill="white", width=5, tags="static")
-    canvas.create_line(convert_coords(1, 0.3, canvas,True), convert_coords(0.9, 0.3, canvas,True), fill="white", width=5, tags="static")
-    canvas.create_line(convert_coords(0,0,canvas,True),convert_coords(0,0.1,canvas,True),fill="#00ff01",width=5,tags="static")
-    canvas.create_line(convert_coords(0,0,canvas,True),convert_coords(0.1,0,canvas,True),fill="#ff0001",width=5,tags="static")
+    canvas.create_line(convert_coords(-1, 0.6, canvas, True), convert_coords(1, 0.6, canvas, True), fill="white", width=5, tags="static")
+    canvas.create_line(convert_coords(-1, -0.6, canvas, True), convert_coords(-1, 0.6, canvas, True), fill="white", width=5, tags="static")
+    canvas.create_line(convert_coords(1, -0.6, canvas, True), convert_coords(1, 0.6, canvas, True), fill="white", width=5, tags="static")
+
     # Draw the goals
-    canvas.create_rectangle(convert_coords(-1, -0.4, canvas,True), convert_coords(-0.6, 0.4, canvas,True), outline="black", width=3.5, tags="static")
-    canvas.create_rectangle(convert_coords(1, -0.4, canvas,True), convert_coords(0.6, 0.4, canvas,True), outline="black", width=3.5, tags="static")
-    canvas.create_line(convert_coords(-1, -0.4, canvas,True), convert_coords(-1, 0.4, canvas,True), fill="black", width=3.5, tags="static")
-    canvas.create_line(convert_coords(1, -0.4, canvas,True), convert_coords(1, 0.4, canvas,True), fill="black", width=3.5, tags="static")
-    
+    canvas.create_line(convert_coords(-1, -0.3, canvas, True), convert_coords(-1, 0.3, canvas, True), fill="white", width=5, tags="static")
+    canvas.create_line(convert_coords(1, -0.3, canvas, True), convert_coords(1, 0.3, canvas, True), fill="white", width=5, tags="static")
 
     # Draw the center circle
-    draw_circle(canvas,x=0, y=0, r=0.3,color= "black", fill=False, tag="static")
-    draw_circle(canvas,x=0.46, y=-0.3, r=0.05,color= "black", fill=False, tag="static")
-    draw_circle(canvas,x=-0.46, y=0.3, r=0.05,color= "black", fill=False, tag="static")
-    draw_circle(canvas,x=0.46, y=0.3, r=0.05,color= "black", fill=False, tag="static")
-    draw_circle(canvas,x=-0.46, y=-0.3, r=0.05,color= "black", fill=False, tag="static")
-    draw_graduations(canvas)
-# Autres éléments statiques (génération du terrain)
+    draw_circle(canvas, x=0, y=0, r=0.3, color="black", fill=False, tag="static")
 
-from math import atan2, cos, sin, sqrt
+    # Draw additional static elements
+    draw_graduations(canvas)
 
 def draw_half_line_from_green1_to_ball(client,canvas, green1_position, ball_position, blue_positions, tolerance=0.1):
     """
@@ -75,7 +61,7 @@ def draw_half_line_from_green1_to_ball(client,canvas, green1_position, ball_posi
     else:
         # Si aucun robot n'est croisé, la demi-droite atteint sa longueur maximale
         x_end = x_green1 + length * cos(angle)
-        y_end = y_green1 + length * sin(angle)
+        y_end = x_green1 + length * sin(angle)
 
     # Convertir les coordonnées pour le canvas
     x1_canvas, y1_canvas = convert_coords(x_green1, y_green1, canvas, True)
@@ -103,26 +89,24 @@ def draw_dynamic_elements(canvas, client):
     canvas.delete("dynamic")
     
     ball_position = client.ball
-    robots = [client.green1, client.green2, client.blue1, client.blue2]
-    i = 0
+    robots = [client.robot['green'][1], client.robot['green'][2], client.robot['blue'][1], client.robot['blue'][2]]
     
     # Dessin des éléments dynamiques
     for robot in robots:
-        i += 1
-        if i < 3:
-            fill = "#00FF10"  
-            outline = "black"
-        else:
-            fill = "blue"
-            outline = "white"
-        x, y = robot.position
+        color = "green" if robot.color == "green" else "blue"
+        fill = "#00FF10" if color == "green" else "blue"
+        if color == "green":
+            fill = "#7CFC00"  # Lighter green color
+        outline = "black" if color == "green" else "white"
+        
+        x, y = robot.pose[:2]
         robot_radius = rsk.constants.robot_radius
         canvas.create_oval(convert_coords(x - robot_radius, y - robot_radius, canvas, True), 
                            convert_coords(x + robot_radius, y + robot_radius, canvas, True), 
                            outline = outline, fill = fill, tags = "dynamic")
         
         # Dessin du trait devant le robot suivant son orientation
-        orientation = robot.orientation
+        orientation = robot.pose[2]
         line_length = 0.1  # Longueur du trait devant le robot
         x_end = x + line_length * cos(orientation)
         y_end = y + line_length * sin(orientation)
@@ -138,6 +122,48 @@ def draw_dynamic_elements(canvas, client):
                        outline = "orange", fill = "orange", tags = "dynamic")
     
     # Dessin de la demi-droite
-    draw_half_line_from_green1_to_ball(client, canvas, client.green1.position, ball_position, [client.blue1.position, client.blue2.position])
-    draw_half_line_from_green1_to_ball(client, canvas, client.blue1.position, ball_position, [client.green1.position, client.green2.position])
+    draw_half_line_from_green1_to_ball(client, canvas, client.robot['green'][1].pose[:2], ball_position, [client.robot['blue'][1].pose[:2], client.robot['blue'][2].pose[:2]])
+    draw_half_line_from_green1_to_ball(client, canvas, client.robot['blue'][1].pose[:2], ball_position, [client.robot['green'][1].pose[:2], client.robot['green'][2].pose[:2]])
+
+def draw_field():
+    """Renders the soccer field and returns the drawing as a string (SVG)."""
+    svg_elements = []
+
+    # Draw field boundaries
+    svg_elements.append('<rect x="-1" y="-0.6" width="2" height="1.2" fill="none" stroke="white" stroke-width="0.02"/>')
+
+    # Draw center circle
+    svg_elements.append('<circle cx="0" cy="0" r="0.3" fill="none" stroke="black" stroke-width="0.02"/>')
+
+    # Draw goals
+    svg_elements.append('<rect x="-1" y="-0.4" width="0.4" height="0.8" fill="none" stroke="black" stroke-width="0.02"/>')
+    svg_elements.append('<rect x="0.6" y="-0.4" width="0.4" height="0.8" fill="none" stroke="black" stroke-width="0.02"/>')
+
+    # Draw additional static elements
+    svg_elements.append('<line x1="-1" y1="-0.3" x2="-0.9" y2="-0.3" stroke="white" stroke-width="0.02"/>')
+    svg_elements.append('<line x1="-1" y1="0.3" x2="-0.9" y2="0.3" stroke="white" stroke-width="0.02"/>')
+    svg_elements.append('<line x1="1" y1="-0.3" x2="0.9" y2="-0.3" stroke="white" stroke-width="0.02"/>')
+    svg_elements.append('<line x1="1" y1="0.3" x2="0.9" y2="0.3" stroke="white" stroke-width="0.02"/>')
+
+    # Combine all SVG elements into a single SVG string
+    svg_content = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-1.1 -0.7 2.2 1.4" style="background-color: green;">' + ''.join(svg_elements) + '</svg>'
+    return svg_content
+
+def get_client_data():
+    """Fetch the latest client data. Replace this with actual implementation."""
+    # Example client data
+    client = {
+        'ball': [0, 0],
+        'robot': {
+            'green': {
+                1: {'pose': [-0.5, 0, 0]},
+                2: {'pose': [-0.5, 0.2, 0]}
+            },
+            'blue': {
+                1: {'pose': [0.5, 0, 0]},
+                2: {'pose': [0.5, 0.2, 0]}
+            }
+        }
+    }
+    return client
 

@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soccer Field Simulator</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #343a40;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            text-align: center;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 20px;
+            width: 100%;
+            max-width: 1400px;
+        }
+        canvas {
+            background-color: #28a745;
+            border: 2px solid #343a40;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+        #controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+        #controls button {
+            margin: 10px 0;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        #controls button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+        #coordinates, #ballCoordinates, #robotCoordinates {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #343a40;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Soccer Field Simulator</h1>
+    <div class="container">
+        <canvas id="soccerField" width="1200" height="600"></canvas>
+        <div id="controls">
+            <button id="deselectRobotButton">Deselect Robot</button>
+            <button id="goToLesAmicalesButton">Les Amicales</button>
+            <div id="coordinates">Coordinates: (0, 0)</div>
+            <div id="ballCoordinates">Ball Coordinates: (0, 0)</div>
+            <div id="robotCoordinates"></div>
+        </div>
+    </div>
+    <script>
+        const canvas = document.getElementById('soccerField');
+        const ctx = canvas.getContext('2d');
+        const coordinatesDisplay = document.getElementById('coordinates');
+        const ballCoordinatesDisplay = document.getElementById('ballCoordinates');
+        const robotCoordinatesDisplay = document.getElementById('robotCoordinates');
+
+        function convertCoords(x, y, toCanvas = false) {
+            const width = canvas.width;
+            const height = canvas.height;
+            const scaleFactor = Math.min(width, height) / 2; // Adjust scale factor back to 1:1 scale
+            if (toCanvas) {
+                return [(x * scaleFactor) + (width / 2), (y * -scaleFactor) + (height / 2)];
+            } else {
+                return [(x - (width / 2)) / scaleFactor, ((height / 2) - y) / scaleFactor];
+            }
+        }
+
+        function drawCircle(x, y, r, color, fill = true) {
+            const [cx, cy] = convertCoords(x, y, true);
+            ctx.beginPath();
+            ctx.arc(cx, cy, r * Math.min(canvas.width, canvas.height) / 2, 0, 2 * Math.PI); // Adjust radius back to 1:1 scale
+            ctx.strokeStyle = color;
+            ctx.fillStyle = color;
+            if (fill) {
+                ctx.fill();
+            } else {
+                ctx.stroke();
+            }
+        }
+
+        function drawStaticElements() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw field boundaries
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = 5;
+            ctx.strokeRect(...convertCoords(-1, -0.6, true), convertCoords(0.0, 2.2, true)[0], convertCoords(2, 2.2, true)[1]);
+
+            // Draw center circle
+            drawCircle(0, 0, 0.3, 'black', false);
+
+            // Draw goals
+            ctx.beginPath();
+            ctx.moveTo(...convertCoords(-1, -0.3, true));
+            ctx.lineTo(...convertCoords(-1, 0.3, true));
+            ctx.moveTo(...convertCoords(1, -0.3, true));
+            ctx.lineTo(...convertCoords(1, 0.3, true));
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = 5;
+            ctx.stroke();
+
+            // Draw additional static elements
+            ctx.beginPath();
+            ctx.moveTo(...convertCoords(-1, -0.3, true));
+            ctx.lineTo(...convertCoords(-0.9, -0.3, true));
+            ctx.moveTo(...convertCoords(-1, 0.3, true));
+            ctx.lineTo(...convertCoords(-0.9, 0.3, true));
+            ctx.moveTo(...convertCoords(1, -0.3, true));
+            ctx.lineTo(...convertCoords(0.9, -0.3, true));
+            ctx.moveTo(...convertCoords(1, 0.3, true));
+            ctx.lineTo(...convertCoords(0.9, 0.3, true));
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = 5;
+            ctx.stroke();
+
+            // Draw grid with graduations
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+            ctx.lineWidth = 1;
+            ctx.font = '12px Arial';
+            ctx.fillStyle = 'white';
+            for (let x = -1; x <= 1; x += 0.1) {
+                ctx.beginPath();
+                ctx.moveTo(...convertCoords(x, -0.6, true));
+                ctx.lineTo(...convertCoords(x, 0.6, true));
+                ctx.stroke();
+                if (Math.abs(x % 0.5) < 0.01) {
+                    ctx.fillText(x.toFixed(1), ...convertCoords(x, -0.65, true));
+                }
+            }
+            for (let y = -0.6; y <= 0.6; y += 0.1) {
+                ctx.beginPath();
+                ctx.moveTo(...convertCoords(-1, y, true));
+                ctx.lineTo(...convertCoords(1, y, true));
+                ctx.stroke();
+                if (Math.abs(y % 0.5) < 0.01) {
+                    ctx.fillText(y.toFixed(1), ...convertCoords(-1.1, y, true));
+                }
+            }
+        }
+
+        function drawCircleWithBorder(x, y, r, color, borderColor, borderWidth) {
+            const [cx, cy] = convertCoords(x, y, true);
+            ctx.beginPath();
+            ctx.arc(cx, cy, r * Math.min(canvas.width, canvas.height) / 2, 0, 2 * Math.PI); // Adjust radius back to 1:1 scale
+            ctx.strokeStyle = borderColor;
+            ctx.lineWidth = borderWidth;
+            ctx.stroke();
+            ctx.fillStyle = color;
+            ctx.fill();
+        }
+
+        function drawDynamicElements(client) {
+            // Draw the ball
+            const ball = client.ball;
+            drawCircle(ball[0], ball[1], 0.05, 'orange');
+            ballCoordinatesDisplay.textContent = `Ball Coordinates: (${ball[0].toFixed(2)},${ball[1].toFixed(2)})`;
+
+            // Draw robots
+            const robots = [
+                { color: 'green', id: 1, pose: client.robot.green[1].pose },
+                { color: 'green', id: 2, pose: client.robot.green[2].pose },
+                { color: 'blue', id: 1, pose: client.robot.blue[1].pose },
+                { color: 'blue', id: 2, pose: client.robot.blue[2].pose }
+            ];
+
+            let robotCoordinatesText = 'Robot Coordinates:<br>';
+            robots.forEach(robot => {
+                const [x, y, orientation] = robot.pose;
+                const color = robot.color === 'green' ? '#7CFC00' : 'blue';  // Lighter green for green robots
+                const borderColor = selectedRobot && selectedRobot.color === robot.color && selectedRobot.id === robot.id ? 'red' : 'black';
+                const borderWidth = selectedRobot && selectedRobot.color === robot.color && selectedRobot.id === robot.id ? 5 : 2;
+                drawCircleWithBorder(x, y, 0.1, color, borderColor, borderWidth);
+
+                // Draw orientation line
+                const lineLength = 0.1;
+                const x_end = x + lineLength * Math.cos(orientation);
+                const y_end = y + lineLength * Math.sin(orientation);
+                ctx.beginPath();
+                ctx.moveTo(...convertCoords(x, y, true));
+                ctx.lineTo(...convertCoords(x_end, y_end, true));
+                ctx.strokeStyle = '#FF69B4';  // Pink color
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                robotCoordinatesText += `${robot.color} ${robot.id}: (${x.toFixed(2)}, ${y.toFixed(2)})<br>`;
+            });
+            robotCoordinatesDisplay.innerHTML = robotCoordinatesText;
+        }
+
+        let client = { ball: [0, 0], robot: { green: { 1: { pose: [0, 0, 0] }, 2: { pose: [0, 0, 0] } }, blue: { 1: { pose: [0, 0, 0] }, 2: { pose: [0, 0, 0] } } } };
+
+        function fetchLatestPositions() {
+            fetch('/update_field')
+                .then(response => response.json())
+                .then(data => {
+                    client = data; // Update client data from server
+                    updateField(client);
+                })
+                .catch(error => console.error('Error fetching latest positions:', error));
+        }
+
+        function updateField(client) {
+            drawStaticElements();
+            drawDynamicElements(client);
+        }
+
+        function animateRobotMovement(robot, targetX, targetY, duration = 1000) {
+            const startX = robot.pose[0];
+            const startY = robot.pose[1];
+            const startTime = performance.now();
+
+            function animate(time) {
+                const elapsed = time - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const newX = startX + (targetX - startX) * progress;
+                const newY = startY + (targetY - startY) * progress;
+
+                robot.pose[0] = newX;
+                robot.pose[1] = newY;
+
+                updateField(client);
+
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        let selectedRobot = null;
+        let lastUpdateTime = 0;
+
+        function animationLoop(timestamp) {
+            if (timestamp - lastUpdateTime >= 5) { // Update every 5ms for 200 FPS
+                fetchLatestPositions();
+                lastUpdateTime = timestamp;
+            }
+            requestAnimationFrame(animationLoop);
+        }
+
+        canvas.addEventListener('mousemove', (event) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            const [fieldX, fieldY] = convertCoords(x, y);
+            coordinatesDisplay.textContent = `Coordinates: (${fieldX.toFixed(2)}, ${fieldY.toFixed(2)})`;
+        });
+
+        canvas.addEventListener('click', (event) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            const [fieldX, fieldY] = convertCoords(x, y); // Convert to field coordinates
+
+            const robots = [
+                { color: 'green', id: 1, pose: client.robot.green[1].pose },
+                { color: 'green', id: 2, pose: client.robot.green[2].pose },
+                { color: 'blue', id: 1, pose: client.robot.blue[1].pose },
+                { color: 'blue', id: 2, pose: client.robot.blue[2].pose }
+            ];
+
+            if (selectedRobot) {
+                const { color, id } = selectedRobot;
+                fetch('/move_robot', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ color, id, x: fieldX, y: fieldY, alpha: 0 }) // Assuming alpha = 0 for simplicity
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        animateRobotMovement(client.robot[color][id], fieldX, fieldY);
+                        selectedRobot = null; // Deselect robot after moving
+                    }
+                })
+                .catch(error => console.error('Error moving robot:', error));
+            } else {
+                // Check if a robot is clicked
+                const clickedRobot = robots.find(robot => {
+                    const [rx, ry] = convertCoords(robot.pose[0], robot.pose[1], true);
+                    const distance = Math.sqrt((x - rx) ** 2 + (y - ry) ** 2);
+                    return distance < 50; // Assuming 50 pixels as the clickable radius
+                });
+
+                if (clickedRobot) {
+                    selectedRobot = clickedRobot;
+                    updateField(client); // Update field to show selected robot
+                } else {
+                    fetch('/teleport_ball', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ x: fieldX, y: fieldY })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            client.ball = [fieldX, fieldY]; // Update ball position in client
+                            updateField(client); // Update field with new ball position
+                        }
+                    })
+                    .catch(error => console.error('Error teleporting ball:', error));
+                }
+            }
+        });
+
+        document.getElementById('deselectRobotButton').addEventListener('click', () => {
+            selectedRobot = null;
+            updateField(client); // Update field to remove selection highlight
+        });
+
+        document.getElementById('goToLesAmicalesButton').addEventListener('click', () => {
+            window.location.href = 'https://les-amicales.fr';
+        });
+
+        // Initial draw
+        fetchLatestPositions();
+        requestAnimationFrame(animationLoop);
+
+        // Clean up animation frame on page unload
+        window.addEventListener('beforeunload', () => {
+            cancelAnimationFrame(animationFrameId);
+        });
+
+        // Remove the setInterval call
+        // setInterval(fetchLatestPositions, 1000);
+    </script>
+</body>
+</html>
