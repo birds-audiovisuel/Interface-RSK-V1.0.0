@@ -407,10 +407,10 @@
             // Draw goals with more realistic graphics
             function drawGoal(x, y, width, height) {
                 ctx.beginPath();
-                ctx.moveTo(...convertCoords(x, y, true));
-                ctx.lineTo(...convertCoords(x, y + height, true));
-                ctx.lineTo(...convertCoords(x + width, y + height, true));
-                ctx.lineTo(...convertCoords(x + width, y, true));
+                ctx.moveTo(...convertCoords(x, y - 0.1, true)); // Adjust y-coordinate
+                ctx.lineTo(...convertCoords(x, y + height + 0.1, true)); // Adjust y-coordinate
+                ctx.lineTo(...convertCoords(x + width, y + height + 0.1, true)); // Adjust y-coordinate
+                ctx.lineTo(...convertCoords(x + width, y - 0.1, true)); // Adjust y-coordinate
                 ctx.closePath();
                 ctx.strokeStyle = 'black';
                 ctx.lineWidth = 5;
@@ -421,22 +421,19 @@
                 ctx.lineWidth = 1;
                 for (let i = 0; i <= width; i += 0.1) {
                     ctx.beginPath();
-                    ctx.moveTo(...convertCoords(x + i, y, true));
-                    ctx.lineTo(...convertCoords(x + i, y + height, true));
+                    ctx.moveTo(...convertCoords(x + i, y - 0.1, true)); // Adjust y-coordinate
+                    ctx.lineTo(...convertCoords(x + i, y + height + 0.1, true)); // Adjust y-coordinate
                     ctx.stroke();
                 }
                 for (let i = 0; i <= height; i += 0.1) {
                     ctx.beginPath();
-                    ctx.moveTo(...convertCoords(x, y + i, true));
-                    ctx.lineTo(...convertCoords(x + width, y + i, true));
+                    ctx.moveTo(...convertCoords(x, y + i - 0.1, true)); // Adjust y-coordinate
+                    ctx.lineTo(...convertCoords(x + width, y + i - 0.1, true)); // Adjust y-coordinate
                     ctx.stroke();
                 }
 
                 // Draw goal posts
                 ctx.fillStyle = 'black';
-                
-                
-                
             }
 
             drawGoal(-1, -0.3, 0.3, 0.6);
