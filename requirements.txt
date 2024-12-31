@@ -1,3 +1,2 @@
 Flask
-rsk
-# Add other dependencies here
+robot-soccer-kit[gc]
