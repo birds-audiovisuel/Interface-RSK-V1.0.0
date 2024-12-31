@@ -26,9 +26,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: start rsk
-      run: |
-        python -m rsk.game_controller -s
+  
     - name: Start backend
       run: |
         python main.py
