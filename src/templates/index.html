@@ -26,7 +26,7 @@
             font-size: 3em;
             text-align: center;
             animation: slideInFromTop 1s ease-in-out;
-            
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
         @keyframes slideInFromTop {
             from { transform: translateY(-50px); opacity: 0; }
@@ -42,7 +42,7 @@
             animation: fadeIn 1.5s ease-in-out;
         }
         canvas {
-            background-color: #005800;
+            background: radial-gradient(circle, #005800, #003300);
             border: 2px solid #00d4ff;
             border-radius: 10px;
             box-shadow: 0 0 20px #00d4ff;
@@ -163,13 +163,120 @@
         a:hover {
             color: #007bff;
         }
+        #outOfBoundsMessage {
+            display: none;
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff0000;
+            text-align: center;
+            animation: fadeIn 1s ease-in-out, pulse 1s infinite;
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 1200px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        #outOfBoundsMessage:hover::after {
+            content: "Veuillez mettre la balle sur le point entouré";
+            display: block;
+            margin-top: 5px;
+            font-size: 16px;
+            color: #ffffff;
+        }
+        #goalMessage {
+            display: none;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 1200px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        #settingsButton {
+            margin: 10px 0;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background: linear-gradient(135deg, #00d4ff, #007bff);
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+        #settingsButton:hover {
+            background: linear-gradient(135deg, #007bff, #00d4ff);
+            transform: scale(1.1);
+        }
+        #settingsModal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+            animation: fadeIn 0.5s ease-in-out;
+            backdrop-filter: blur(5px);
+        }
+        #settingsContent {
+            background-color: rgba(255, 255, 255, 0.1);
+            margin: 10% auto;
+            padding: 20px;
+            border: 2px solid #00d4ff;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+            color: #ffffff;
+            box-shadow: 0 0 20px #00d4ff;
+            animation: slideInFromBottom 0.5s ease-in-out;
+        }
+        #settingsContent label {
+            display: block;
+            margin: 10px 0;
+            font-size: 1.2em;
+        }
+        #settingsContent input[type="color"],
+        #settingsContent input[type="text"] {
+            margin-left: 10px;
+        }
+        #closeSettingsModal {
+            color: #00d4ff;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        #closeSettingsModal:hover,
+        #closeSettingsModal:focus {
+            color: #ffffff;
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
+    <header>
+        
+    </header>
     <h1>Simulateur de Terrain de Football</h1>
     <div class="container">
         <canvas id="soccerField" width="1200" height="600"></canvas>
         <div id="controls">
+            <button id="settingsButton">Menu</button>
             <button id="deselectRobotButton">Désélectionner le Robot</button>
             <button id="goToLesAmicalesButton">Les Amicales</button>
             <button id="mathFormulasButton">Formules Mathématiques</button>
@@ -179,6 +286,8 @@
             <div id="robotCoordinates"></div>
         </div>
     </div>
+    <div id="outOfBoundsMessage">Balle en dehors du terrain</div>
+    <div id="goalMessage">But!</div>
     <div id="mathFormulasModal">
         <div id="mathFormulasContent">
             <span id="closeModal">&times;</span>
@@ -191,6 +300,22 @@
                 <li>Surface d'un triangle : <br><code>A = (1 / 2) * | x1(y2 - y3) + x2(y3 - y1) + x3(y1 - y2) |</code></li>
                 <li>Équation d'un cercle : <br><code>(x - h)^2 + (y - k)^2 = r^2</code></li>
             </ul>
+        </div>
+    </div>
+    <div id="settingsModal">
+        <div id="settingsContent">
+            <span id="closeSettingsModal">&times;</span>
+            <h2>Paramètres de l'Interface</h2>
+            <label for="backgroundColor">Couleur de fond:</label>
+            <input type="color" id="backgroundColor" name="backgroundColor" value="#0f2027">
+            <label for="textColor">Couleur du texte:</label>
+            <input type="color" id="textColor" name="textColor" value="#ffffff">
+            <label for="buttonColor">Couleur des boutons:</label>
+            <input type="color" id="buttonColor" name="buttonColor" value="#00d4ff">
+            <label for="fieldColor1">Couleur du terrain (dégradé 1):</label>
+            <input type="color" id="fieldColor1" name="fieldColor1" value="#005800">
+            <label for="fieldColor2">Couleur du terrain (dégradé 2):</label>
+            <input type="color" id="fieldColor2" name="fieldColor2" value="#003300">
         </div>
     </div>
     <script>
@@ -227,6 +352,13 @@
         function drawStaticElements() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+            // Draw field background with gradient
+            const gradient = ctx.createRadialGradient(canvas.width / 2, canvas.height / 2, 0, canvas.width / 2, canvas.height / 2, canvas.width / 2);
+            gradient.addColorStop(0, fieldColor1Input.value);
+            gradient.addColorStop(1, fieldColor2Input.value);
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
             // Draw field boundaries
             ctx.strokeStyle = 'white';
             ctx.lineWidth = 5;
@@ -235,15 +367,43 @@
             // Draw center circle
             drawCircle(0, 0, 0.3, 'black', false);
 
-            // Draw goals
-            ctx.beginPath();
-            ctx.moveTo(...convertCoords(-1, -0.3, true));
-            ctx.lineTo(...convertCoords(-1, 0.3, true));
-            ctx.moveTo(...convertCoords(1, -0.3, true));
-            ctx.lineTo(...convertCoords(1, 0.3, true));
-            ctx.strokeStyle = 'white';
-            ctx.lineWidth = 5;
-            ctx.stroke();
+            // Draw goals with more realistic graphics
+            function drawGoal(x, y, width, height) {
+                ctx.beginPath();
+                ctx.moveTo(...convertCoords(x, y, true));
+                ctx.lineTo(...convertCoords(x, y + height, true));
+                ctx.lineTo(...convertCoords(x + width, y + height, true));
+                ctx.lineTo(...convertCoords(x + width, y, true));
+                ctx.closePath();
+                ctx.strokeStyle = 'black';
+                ctx.lineWidth = 5;
+                ctx.stroke();
+
+                // Draw net
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+                ctx.lineWidth = 1;
+                for (let i = 0; i <= width; i += 0.1) {
+                    ctx.beginPath();
+                    ctx.moveTo(...convertCoords(x + i, y, true));
+                    ctx.lineTo(...convertCoords(x + i, y + height, true));
+                    ctx.stroke();
+                }
+                for (let i = 0; i <= height; i += 0.1) {
+                    ctx.beginPath();
+                    ctx.moveTo(...convertCoords(x, y + i, true));
+                    ctx.lineTo(...convertCoords(x + width, y + i, true));
+                    ctx.stroke();
+                }
+
+                // Draw goal posts
+                ctx.fillStyle = 'black';
+                
+                
+                
+            }
+
+            drawGoal(-1, -0.3, 0.3, 0.6);
+            drawGoal(0.7, -0.3, 0.3, 0.6);
 
             // Draw additional static elements
             ctx.beginPath();
@@ -286,6 +446,13 @@
                     ctx.fillText(y.toFixed(1), ...convertCoords(-1.1, y, true));
                 }
             }
+
+            // Draw black points
+            drawCircle(0.45, 0.3, 0.02, 'black');
+            drawCircle(0.45, -0.3, 0.02, 'black');
+            drawCircle(-0.45, 0.3, 0.02, 'black');
+            drawCircle(-0.45, -0.3, 0.02, 'black');
+            drawCircle(0, 0, 0.02, 'black');
         }
 
         function drawCircleWithBorder(x, y, r, color, borderColor, borderWidth) {
@@ -304,6 +471,40 @@
             const ball = client.ball;
             drawCircle(ball[0], ball[1], 0.05, 'orange');
             ballCoordinatesDisplay.textContent = `Coordonnées du Ballon : (${ball[0].toFixed(2)},${ball[1].toFixed(2)})`;
+
+            // Check if a goal is scored and draw a red circle around the center point (0,0)
+            const goalMessage = document.getElementById('goalMessage');
+            const isGoal = (ball[0] > 0.9 && ball[0] < 2 && ball[1] > -0.3 && ball[1] < 0.3) || 
+                           (ball[0] < -0.9 && ball[0] > -2 && ball[1] > -0.3 && ball[1] < 0.3);
+            if (isGoal) {
+                drawCircle(0, 0, 0.1, 'red', false);
+                goalMessage.style.display = 'block';
+                goalMessage.style.left = '43%'; // Center the message relative to the field
+                goalMessage.style.color = ball[0] > 0.9 ? '#00FFFF' : '#7CFC00'; // Color based on which team scored
+            } else {
+                goalMessage.style.display = 'none';
+            }
+
+            // Check if ball is out of bounds and draw a circle around the nearest of the four specified points
+            const points = [
+                [0.45, 0.3],
+                [0.45, -0.3],
+                [-0.45, 0.3],
+                [-0.45, -0.3]
+            ];
+            const outOfBoundsMessage = document.getElementById('outOfBoundsMessage');
+            if (!isGoal && (ball[0] < -1 || ball[0] > 1 || ball[1] < -0.6 || ball[1] > 0.6)) {
+                let nearestPoint = points.reduce((prev, curr) => {
+                    const prevDist = Math.sqrt((ball[0] - prev[0]) ** 2 + (ball[1] - prev[1]) ** 2);
+                    const currDist = Math.sqrt((ball[0] - curr[0]) ** 2 + (ball[1] - curr[1]) ** 2);
+                    return currDist < prevDist ? curr : prev;
+                });
+                drawCircle(nearestPoint[0], nearestPoint[1], 0.1, 'red', false);
+                outOfBoundsMessage.style.display = 'block';
+                outOfBoundsMessage.style.left = '4%'; // Center the message relative to the field
+            } else {
+                outOfBoundsMessage.style.display = 'none';
+            }
 
             // Draw robots
             const robots = [
@@ -502,6 +703,56 @@
         }
 
         document.getElementById('resetRobotsButton').addEventListener('click', resetRobots);
+
+        const settingsButton = document.getElementById('settingsButton');
+        const settingsModal = document.getElementById('settingsModal');
+        const closeSettingsModal = document.getElementById('closeSettingsModal');
+        const backgroundColorInput = document.getElementById('backgroundColor');
+        const textColorInput = document.getElementById('textColor');
+        const buttonColorInput = document.getElementById('buttonColor');
+        const fieldColor1Input = document.getElementById('fieldColor1');
+        const fieldColor2Input = document.getElementById('fieldColor2');
+
+        settingsButton.onclick = function() {
+            settingsModal.style.display = 'block';
+        }
+
+        closeSettingsModal.onclick = function() {
+            settingsModal.style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == settingsModal) {
+                settingsModal.style.display = 'none';
+            }
+        }
+
+        backgroundColorInput.oninput = function() {
+            document.body.style.background = backgroundColorInput.value;
+        }
+
+        textColorInput.oninput = function() {
+            document.body.style.color = textColorInput.value;
+            document.querySelector('h1').style.color = textColorInput.value;
+            document.querySelectorAll('#coordinates, #ballCoordinates, #robotCoordinates').forEach(element => {
+                element.style.color = textColorInput.value;
+            });
+        }
+
+        buttonColorInput.oninput = function() {
+            const buttons = document.querySelectorAll('#controls button, #mathFormulasButton, #settingsButton');
+            buttons.forEach(button => {
+                button.style.background = buttonColorInput.value;
+            });
+        }
+
+        fieldColor1Input.oninput = function() {
+            updateField(client);
+        }
+
+        fieldColor2Input.oninput = function() {
+            updateField(client);
+        }
 
         // Initial draw
         fetchLatestPositions();
