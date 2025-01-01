@@ -38,10 +38,10 @@
             border-radius: 1vw; /* Use relative units */
             box-shadow: 0 0 2vw #00d4ff; /* Use relative units */
             /* Make canvas responsive */
-            width: 53%;
+            width: 70%; /* Adjust width */
             height: 100%;
             max-height: calc((6/12) * 80vw);
-            max-width: calc((12/6) * 90vh);
+            max-width: calc((12/6) * 100vh); /* Adjust maximum width */
             transform-origin: center; /* Ensure scaling is centered */
         }
         #controls {
@@ -54,11 +54,13 @@
             box-shadow: 0 0 2vw #00d4ff; /* Use relative units */
             overflow-y: auto; /* Add vertical scroll if necessary */
             max-height: 80vh; /* Limit height to ensure all buttons are visible */
+            width: 30%; /* Revert width */
+            max-width: 8vw; /* Revert maximum width */
         }
         #controls button {
             margin: 0.5vw 0; /* Use relative units */
-            padding: 0.5vw 1vw; /* Reduce padding */
-            font-size: 0.8vw; /* Reduce font size */
+            padding: 0.3vw 0.6vw; /* Reduce padding */
+            font-size: 0.6vw; /* Reduce font size */
             border: none;
             border-radius: 0.5vw; /* Use relative units */
             background: linear-gradient(135deg, #00d4ff, #007bff);
@@ -73,17 +75,17 @@
             box-shadow: 0 0.6vw 0.8vw rgba(0, 0, 0, 0.2); /* Use relative units */
         }
         #coordinates {
-            font-size: 14px;
+            font-size: 12px; /* Reduce font size */
             color: #00d4ff;
             text-align: left;
         }
         #ballCoordinates {
-            font-size: 14px;
+            font-size: 12px; /* Reduce font size */
             color: #00d4ff;
             text-align: left;
         }
         #robotCoordinates {
-            font-size: 14px;
+            font-size: 12px; /* Reduce font size */
             color: #00d4ff;
             text-align: left;
         }
@@ -269,8 +271,8 @@
             position: relative; /* Ensure stars are not placed inside these containers */
             z-index: 1;
             margin-bottom: 2vw; /* Use relative units */
-            width: 40%; /* Reduce width */
-            max-width: 15vw; /* Reduce maximum width */
+            width: 23%; /* Increase width */
+            max-width: 10vw; /* Increase maximum width */
         }
         .left-container button {
             margin: 1vw 0; /* Use relative units */
@@ -364,18 +366,25 @@
             box-shadow: 0 0 2vw #00d4ff; /* Use relative units */
             z-index: 2;
             height: auto; /* Adjust height to fit content */
-            width: 15vw; /* Reduce width */
+            width: 12vw; /* Reduce width */
         }
         #coordinatesContainer.position-7 {
-            width: 100%;
-            height: 400%; /* Set a specific height for position 7 */
+            width: 20%;
+            height: auto; /* Adjust height to fit content */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #coordinatesContainer.position-7 > div {
+            width: 78%; /* Adjust width of inner divs */
+            margin-bottom: 1vw; /* Add spacing between divs */
         }
         #coordinatesContainer:not(.position-7) {
-            width: 15vw; /* Reduce width */
+            width: 12vw; /* Reduce width */
             height: auto; /* Adjust height to fit content */
         }
         #coordinates, #ballCoordinates, #robotCoordinates {
-            font-size: 14px;
+            font-size: 12px; /* Reduce font size */
             color: #00d4ff;
             text-align: left;
         }
@@ -641,17 +650,6 @@
     </header>
     <h1>Simulateur Mathématiques RSK</h1>
     <div class="container">
-        <div class="left-container">
-            <button id="goToLesAmicalesButton">Les Amicales</button>
-            <button id="goToSimulateurRSKButton">Simulateur RSK</button>
-            <button id="contactButton">Contact</button> <!-- Added Contact button -->
-        </div>
-        <div id="coordinatesContainer" class="position-7">
-            <div id="coordinates">Coordonnées: (0,0)</div>
-            <div id="ballCoordinates">Coordonnées du Ballon: (0, 0)</div>
-            <div id="robotCoordinates">Coordonnées des Robots:</div>
-        </div>
-        <canvas id="soccerField" width="1200" height="600"></canvas>
         <div id="controls">
             <button id="settingsButton">Choix des couleurs</button>
             <button id="deselectRobotButton">Désélectionner le Robot</button>
@@ -661,6 +659,17 @@
             <button id="coordinatesPositionButton">Placement des coordonnées</button>
             <button id="toggleGalaxyButton">Afficher la galaxie</button>
         </div>
+        <canvas id="soccerField" width="1200" height="600"></canvas>
+        <div class="left-container">
+            <button id="goToLesAmicalesButton">Les Amicales</button>
+            <button id="goToSimulateurRSKButton">Simulateur RSK</button>
+            <button id="contactButton">Contact</button> <!-- Added Contact button -->
+        </div>
+    </div>
+    <div id="coordinatesContainer" class="position-7">
+        <div id="coordinates">Coordonnées: (0,0)</div>
+        <div id="ballCoordinates">Coordonnées du Ballon: (0, 0)</div>
+        <div id="robotCoordinates">Coordonnées des Robots:</div>
     </div>
     <div class="stars-container"></div>
     <div id="outOfBoundsMessage">Balle en dehors du terrain</div>
@@ -810,18 +819,13 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             // Draw field background with gradient
-            const gradient = ctx.createRadialGradient(canvas.width / 3, canvas.height / 3, 0, canvas.width / 3, canvas.height / 3, canvas.width / 3);
+            const gradient = ctx.createRadialGradient(canvas.width / 2, canvas.height / 2, 0, canvas.width / 2, canvas.height / 2, canvas.width / 2);
             gradient.addColorStop(0, fieldColor1Input.value);
             gradient.addColorStop(1, fieldColor2Input.value);
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Apply scaling to the green part of the field
-            const scaleFactor = 1; // Reduced value to shrink the green surface
-            ctx.save();
-            ctx.translate(canvas.width / 2, canvas.height / 2);
-            ctx.scale(scaleFactor, scaleFactor);
-            ctx.translate(-canvas.width / 2, -canvas.height / 2);
+           
 
             // Draw field boundaries
             ctx.strokeStyle = 'white';
@@ -1309,7 +1313,7 @@
 
         const coordinatesContainer = document.getElementById('coordinatesContainer');
         const positions = [
-            { top: '10px', left: '230px' },
+            { top: '8px', left: '200px' },
             { top: '420px', left: '210px' },
             { top: '420px', left: '1170px' },
             { top: '10px', left: '1170px' },
