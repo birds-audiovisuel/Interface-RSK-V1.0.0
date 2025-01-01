@@ -38,10 +38,11 @@
             border-radius: 1vw; /* Use relative units */
             box-shadow: 0 0 2vw #00d4ff; /* Use relative units */
             /* Make canvas responsive */
-            width: 100%;
+            width: 53%;
             height: 100%;
             max-height: calc((6/12) * 80vw);
             max-width: calc((12/6) * 90vh);
+            transform-origin: center; /* Ensure scaling is centered */
         }
         #controls {
             display: flex;
@@ -268,8 +269,8 @@
             position: relative; /* Ensure stars are not placed inside these containers */
             z-index: 1;
             margin-bottom: 2vw; /* Use relative units */
-            width: 100%; /* Make container responsive */
-            max-width: 20vw; /* Limit maximum width */
+            width: 40%; /* Reduce width */
+            max-width: 15vw; /* Reduce maximum width */
         }
         .left-container button {
             margin: 1vw 0; /* Use relative units */
@@ -282,12 +283,7 @@
             cursor: pointer;
             transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
             box-shadow: 0 0.4vw 0.6vw rgba(0, 0, 0, 0.1); /* Use relative units */
-            width: 100%; /* Make buttons responsive */
-        }
-        .left-container button:hover {
-            background: linear-gradient(135deg, #007bff, #00d4ff);
-            transform: scale(1.1);
-            box-shadow: 0 0.6vw 0.8vw rgba(0, 0, 0, 0.2); /* Use relative units */
+            width: 80%; /* Adjust button width */
         }
         #toggleCircleButton {
             margin: 10px 0;
@@ -368,14 +364,14 @@
             box-shadow: 0 0 2vw #00d4ff; /* Use relative units */
             z-index: 2;
             height: auto; /* Adjust height to fit content */
-            width: 20vw; /* Use relative units */
+            width: 15vw; /* Reduce width */
         }
         #coordinatesContainer.position-7 {
             width: 100%;
             height: 400%; /* Set a specific height for position 7 */
         }
         #coordinatesContainer:not(.position-7) {
-            width: 20vw; /* Use relative units */
+            width: 15vw; /* Reduce width */
             height: auto; /* Adjust height to fit content */
         }
         #coordinates, #ballCoordinates, #robotCoordinates {
@@ -814,11 +810,18 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             // Draw field background with gradient
-            const gradient = ctx.createRadialGradient(canvas.width / 2, canvas.height / 2, 0, canvas.width / 2, canvas.height / 2, canvas.width / 2);
+            const gradient = ctx.createRadialGradient(canvas.width / 3, canvas.height / 3, 0, canvas.width / 3, canvas.height / 3, canvas.width / 3);
             gradient.addColorStop(0, fieldColor1Input.value);
             gradient.addColorStop(1, fieldColor2Input.value);
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Apply scaling to the green part of the field
+            const scaleFactor = 1; // Reduced value to shrink the green surface
+            ctx.save();
+            ctx.translate(canvas.width / 2, canvas.height / 2);
+            ctx.scale(scaleFactor, scaleFactor);
+            ctx.translate(-canvas.width / 2, -canvas.height / 2);
 
             // Draw field boundaries
             ctx.strokeStyle = 'white';
@@ -911,6 +914,8 @@
             drawCircle(-0.45, 0.3, 0.02, 'black');
             drawCircle(-0.45, -0.3, 0.02, 'black');
             drawCircle(0, 0, 0.02, 'black');
+
+            ctx.restore(); // Restore the context to remove scaling
         }
 
         function drawCircleWithBorder(x, y, r, color, borderColor, borderWidth) {
@@ -1304,7 +1309,7 @@
 
         const coordinatesContainer = document.getElementById('coordinatesContainer');
         const positions = [
-            { top: '10px', left: '210px' },
+            { top: '10px', left: '230px' },
             { top: '420px', left: '210px' },
             { top: '420px', left: '1170px' },
             { top: '10px', left: '1170px' },
