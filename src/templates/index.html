@@ -296,6 +296,7 @@
             margin-right: 20px; /* Add space between left container and main container */
             position: relative; /* Ensure stars are not placed inside these containers */
             z-index: 1;
+            margin-bottom: 20px; /* Add space below the left container */
         }
         .left-container button {
             margin: 10px 0;
@@ -368,14 +369,15 @@
             border-radius: 10px;
             box-shadow: 0 0 10px #00d4ff;
             z-index: 2;
+            height: auto; /* Adjust height to fit content */
         }
         #coordinatesContainer.position-7 {
             width: 100%;
-            height: auto;
+            height: 400%; /* Set a specific height for position 7 */
         }
         #coordinatesContainer:not(.position-7) {
             width: 200px;
-            height: 150px; /* Increase the height */
+            height: auto; /* Adjust height to fit content */
         }
         #coordinates, #ballCoordinates, #robotCoordinates {
             font-size: 14px;
@@ -509,6 +511,11 @@
             <button id="goToSimulateurRSKButton">Simulateur RSK</button>
             <button id="contactButton">Contact</button> <!-- Added Contact button -->
         </div>
+        <div id="coordinatesContainer" class="position-7">
+            <div id="coordinates">Coordonnées: (0,0)</div>
+            <div id="ballCoordinates">Coordonnées du Ballon: (0, 0)</div>
+            <div id="robotCoordinates">Coordonnées des Robots:</div>
+        </div>
         <canvas id="soccerField" width="1200" height="600"></canvas>
         <div id="controls">
             <button id="settingsButton">Choix des couleurs</button>
@@ -517,11 +524,6 @@
             <button id="resetRobotsButton">Réinitialiser les Robots</button>
             <button id="toggleCircleButton">Afficher le cercle autour de la balle</button>
             <button id="coordinatesPositionButton">Placement des coordonnées</button>
-        </div>
-        <div id="coordinatesContainer" class="position-7">
-            <div id="coordinates">Coordonnées: (0,0)</div>
-            <div id="ballCoordinates">Coordonnées du Ballon: (0, 0)</div>
-            <div id="robotCoordinates">Coordonnées des Robots:</div>
         </div>
     </div>
     <div id="outOfBoundsMessage">Balle en dehors du terrain</div>
@@ -1134,13 +1136,13 @@
 
         const coordinatesContainer = document.getElementById('coordinatesContainer');
         const positions = [
-            { top: '10px', left: '200px' },
-            { top: '450px', left: '200px' },
-            { top: '450px', left: '1150px' },
-            { top: '10px', left: '1150px' },
-            { top: '250px', left: '200px' },
-            { top: '250px', left: '1150px' },
-            { container: 'left-container' }
+            { top: '10px', left: '210px' },
+            { top: '420px', left: '210px' },
+            { top: '420px', left: '1170px' },
+            { top: '10px', left: '1170px' },
+            { top: '240px', left: '200px' },
+            { top: '240px', left: '1170px' },
+            { container: 'left-container', height: '400%' }
         ];
 
         const coordinatesPositionButton = document.getElementById('coordinatesPositionButton');
@@ -1177,6 +1179,7 @@
                     coordinatesContainer.style.left = 'auto';
                     container.appendChild(coordinatesContainer);
                     coordinatesContainer.classList.add('position-7');
+                    coordinatesContainer.style.height = '400%'; // Ensure height is set correctly for position 7
                 } else {
                     coordinatesContainer.style.width = '200px';
                     coordinatesContainer.style.height = '150px'; /* Increase the height */
