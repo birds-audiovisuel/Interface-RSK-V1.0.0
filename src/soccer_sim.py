@@ -8,7 +8,7 @@ import math
 
 app = Flask(__name__)
 
-client = rsk.Client('')  #92.158.250.166
+client = rsk.Client('127.0.0.1', wait_ready=False)
 
 @app.route('/')
 def index():
@@ -69,6 +69,3 @@ def save_text():
         with open(file_path, "w") as file:
             file.write(text)
     return jsonify(success=True)
-
-
-
