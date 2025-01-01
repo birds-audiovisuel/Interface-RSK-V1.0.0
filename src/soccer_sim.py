@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 from src.drawing import draw_field  # Import the drawing function
-from src.geometry_utils import calculate_line_equation
+
 import os
 from tkinter import filedialog
 import rsk
@@ -8,7 +8,7 @@ import math
 
 app = Flask(__name__)
 
-client = rsk.Client()  # Initialize the client once
+client = rsk.Client('')  # Initialize the client with a valid ZMQ URL
 
 @app.route('/')
 def index():
@@ -58,6 +58,7 @@ def reset_robots():
     for color, robots in positions.items():
         for id, (x, y, alpha) in robots.items():
             client.robots[color][id].goto((x, y, math.radians(alpha)), wait=True)
+            client.teleport_ball(0, 0)
     return jsonify(success=True)
 
 @app.route('/save_text', methods=['POST'])
