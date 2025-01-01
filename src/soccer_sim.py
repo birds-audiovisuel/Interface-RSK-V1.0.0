@@ -8,7 +8,7 @@ import math
 
 app = Flask(__name__)
 
-client = rsk.Client('')  # Initialize the client with a valid ZMQ URL
+client = rsk.Client('92.158.250.166')  
 
 @app.route('/')
 def index():
@@ -70,12 +70,5 @@ def save_text():
             file.write(text)
     return jsonify(success=True)
 
-@app.route('/formulas')
-def formulas():
-    return render_template('formulas.html')
 
-@app.route('/draw')
-def draw():
-    # Route to render the drawing
-    drawing = draw_field()
-    return render_template('draw.html', drawing=drawing)
+
