@@ -78,6 +78,3 @@ def draw():
     # Route to render the drawing
     drawing = draw_field()
     return render_template('draw.html', drawing=drawing)
-
-if __name__ == "__main__":
-    app.run(debug=True)
