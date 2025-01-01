@@ -1,10 +1,11 @@
-import os
 from src.soccer_sim import app
+from werkzeug.middleware.dispatcher import DispatcherMiddleware
+from flask import Flask
+
+app_with_prefix = DispatcherMiddleware(Flask("dummy_app"), {
+    "/outils/maths": app
+})
 
 if __name__ == "__main__":
-
-    app.run(host='0.0.0.0', port=8080, debug=True)
-
-
-
-
+    from werkzeug.serving import run_simple
+    run_simple("127.0.0.1", 8080, app_with_prefix) 
