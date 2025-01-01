@@ -8,7 +8,7 @@ import math
 
 app = Flask(__name__)
 
-client = rsk.Client('')  
+client = rsk.Client('')  #92.158.250.166
 
 @app.route('/')
 def index():

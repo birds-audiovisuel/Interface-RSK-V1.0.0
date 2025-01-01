@@ -13,91 +13,77 @@
             background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
             color: #ffffff;
             margin: 0;
-            padding: 20px;
-            animation: fadeIn 1s ease-in-out;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            padding: 2vw; /* Use relative units */
         }
         h1 {
             color: #00d4ff;
-            margin-bottom: 20px;
-            font-size: 3em;
+            margin-bottom: 2vw; /* Use relative units */
+            font-size: 3vw; /* Use relative units */
             text-align: center;
-            animation: slideInFromTop 1s ease-in-out;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-        @keyframes slideInFromTop {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
         }
         .container {
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            gap: 20px;
+            gap: 2vw; /* Use relative units */
             width: 100%;
-            max-width: 1400px;
-            animation: fadeIn 1.5s ease-in-out;
+            max-width: 90vw; /* Use relative units */
             position: relative; /* Ensure stars are not placed inside these containers */
             z-index: 1;
         }
         canvas {
             background: radial-gradient(circle, #005800, #003300);
-            border: 2px solid #00d4ff;
-            border-radius: 10px;
-            box-shadow: 0 0 20px #00d4ff;
-            animation: zoomIn 1s ease-in-out;
-        }
-        @keyframes zoomIn {
-            from { transform: scale(0.8); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
+            border: 0.2vw solid #00d4ff; /* Use relative units */
+            border-radius: 1vw; /* Use relative units */
+            box-shadow: 0 0 2vw #00d4ff; /* Use relative units */
+            width: 100%; /* Make canvas responsive */
+            height: auto; /* Maintain aspect ratio */
+            max-width: 90vw; /* Limit maximum width */
+            max-height: 50vh; /* Limit maximum height */
         }
         #controls {
             display: flex;
             flex-direction: column;
             align-items: center;
             background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px #00d4ff;
-            animation: fadeIn 2s ease-in-out;
+            padding: 2vw; /* Use relative units */
+            border-radius: 1vw; /* Use relative units */
+            box-shadow: 0 0 2vw #00d4ff; /* Use relative units */
+            overflow-y: auto; /* Add vertical scroll if necessary */
+            max-height: 80vh; /* Limit height to ensure all buttons are visible */
         }
         #controls button {
-            margin: 10px 0;
-            padding: 10px 20px;
-            font-size: 16px;
+            margin: 0.5vw 0; /* Use relative units */
+            padding: 0.5vw 1vw; /* Reduce padding */
+            font-size: 0.8vw; /* Reduce font size */
             border: none;
-            border-radius: 5px;
+            border-radius: 0.5vw; /* Use relative units */
             background: linear-gradient(135deg, #00d4ff, #007bff);
             color: white;
             cursor: pointer;
             transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0.4vw 0.6vw rgba(0, 0, 0, 0.1); /* Use relative units */
         }
         #controls button:hover {
             background: linear-gradient(135deg, #007bff, #00d4ff);
             transform: scale(1.1);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0.6vw 0.8vw rgba(0, 0, 0, 0.2); /* Use relative units */
         }
         #coordinates {
             font-size: 14px;
             color: #00d4ff;
             text-align: left;
-            animation: fadeIn 2.5s ease-in-out;
         }
         #ballCoordinates {
             font-size: 14px;
             color: #00d4ff;
             text-align: left;
-            animation: fadeIn 2.5s ease-in-out;
         }
         #robotCoordinates {
             font-size: 14px;
             color: #00d4ff;
             text-align: left;
-            animation: fadeIn 2.5s ease-in-out;
         }
         #mathFormulasButton {
             margin: 10px 0;
@@ -124,7 +110,6 @@
             height: 100%;
             overflow: auto;
             background-color: rgba(0, 0, 0, 0.8);
-            animation: fadeIn 0.5s ease-in-out;
             backdrop-filter: blur(5px);
         }
         #mathFormulasContent {
@@ -137,11 +122,6 @@
             border-radius: 10px;
             color: #ffffff;
             box-shadow: 0 0 20px #00d4ff;
-            animation: slideInFromBottom 0.5s ease-in-out;
-        }
-        @keyframes slideInFromBottom {
-            from { transform: translateY(50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
         }
         #mathFormulasContent ul {
             list-style-type: none;
@@ -183,7 +163,6 @@
             font-weight: bold;
             color: #ff0000;
             text-align: center;
-            animation: fadeIn 1s ease-in-out, pulse 1s infinite;
             position: absolute;
             bottom: 60px; /* Move up by 50px */
             left: 50%;
@@ -191,11 +170,6 @@
             width: 100%;
             max-width: 1200px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
         }
         #outOfBoundsMessage:hover::after {
             content: "Veuillez mettre la balle sur le point entouré";
@@ -209,7 +183,6 @@
             font-size: 24px;
             font-weight: bold;
             text-align: center;
-            animation: fadeIn 1s ease-in-out;
             position: absolute;
             bottom: 50px; /* Move up by 50px */
             left: 50%;
@@ -243,7 +216,6 @@
             height: 100%;
             overflow: auto;
             background-color: rgba(0, 0, 0, 0.8);
-            animation: fadeIn 0.5s ease-in-out;
             backdrop-filter: blur(5px);
         }
         #settingsContent {
@@ -256,7 +228,6 @@
             border-radius: 10px;
             color: #ffffff;
             box-shadow: 0 0 20px #00d4ff;
-            animation: slideInFromBottom 0.5s ease-in-out;
         }
         #settingsContent label {
             display: block;
@@ -289,31 +260,33 @@
             flex-direction: column;
             align-items: center;
             background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px #00d4ff;
-            animation: fadeIn 2s ease-in-out;
-            margin-right: 20px; /* Add space between left container and main container */
+            padding: 2vw; /* Use relative units */
+            border-radius: 1vw; /* Use relative units */
+            box-shadow: 0 0 2vw #00d4ff; /* Use relative units */
+            margin-right: 2vw; /* Use relative units */
             position: relative; /* Ensure stars are not placed inside these containers */
             z-index: 1;
-            margin-bottom: 20px; /* Add space below the left container */
+            margin-bottom: 2vw; /* Use relative units */
+            width: 100%; /* Make container responsive */
+            max-width: 20vw; /* Limit maximum width */
         }
         .left-container button {
-            margin: 10px 0;
-            padding: 10px 20px;
-            font-size: 16px;
+            margin: 1vw 0; /* Use relative units */
+            padding: 1vw 2vw; /* Use relative units */
+            font-size: 1vw; /* Use relative units */
             border: none;
-            border-radius: 5px;
+            border-radius: 0.5vw; /* Use relative units */
             background: linear-gradient(135deg, #00d4ff, #007bff);
             color: white;
             cursor: pointer;
             transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0.4vw 0.6vw rgba(0, 0, 0, 0.1); /* Use relative units */
+            width: 100%; /* Make buttons responsive */
         }
         .left-container button:hover {
             background: linear-gradient(135deg, #007bff, #00d4ff);
             transform: scale(1.1);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0.6vw 0.8vw rgba(0, 0, 0, 0.2); /* Use relative units */
         }
         #toggleCircleButton {
             margin: 10px 0;
@@ -348,6 +321,30 @@
             border-radius: 50%;
             box-shadow: 0 0 10px #ffffff;
             pointer-events: none; /* Ensure stars do not interfere with interactions */
+            animation: moveStar 20s linear infinite;
+        }
+        @keyframes moveStar {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(200px, 200px); }
+        }
+        .stars-container {
+            overflow: hidden;
+            position: fixed; /* Ensure the container is fixed */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0; /* Ensure stars are behind other elements */
+        }
+        .nebula {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('path/to/nebula-image.jpg') no-repeat center center;
+            background-size: cover;
+            z-index: -1; /* Ensure nebula is behind stars */
         }
         .footer-container {
             display: flex;
@@ -362,29 +359,28 @@
         }
         #coordinatesContainer {
             position: absolute;
-            top: 10px;
-            left: 100px;
+            top: 1vw; /* Use relative units */
+            left: 5vw; /* Use relative units */
             background: rgba(0, 0, 0, 0.5);
-            padding: 10px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px #00d4ff;
+            padding: 1vw; /* Use relative units */
+            border-radius: 1vw; /* Use relative units */
+            box-shadow: 0 0 2vw #00d4ff; /* Use relative units */
             z-index: 2;
             height: auto; /* Adjust height to fit content */
+            width: 20vw; /* Use relative units */
         }
         #coordinatesContainer.position-7 {
             width: 100%;
             height: 400%; /* Set a specific height for position 7 */
         }
         #coordinatesContainer:not(.position-7) {
-            width: 200px;
+            width: 20vw; /* Use relative units */
             height: auto; /* Adjust height to fit content */
         }
         #coordinates, #ballCoordinates, #robotCoordinates {
             font-size: 14px;
             color: #00d4ff;
-            color: #00d4ff;
             text-align: left;
-            animation: fadeIn 2.5s ease-in-out;
         }
         #coordinatesPositionSelect {
             margin: 10px 0;
@@ -430,7 +426,6 @@
             height: 100%;
             overflow: auto;
             background-color: rgba(0, 0, 0, 0.8);
-            animation: fadeIn 0.5s ease-in-out;
             backdrop-filter: blur(5px);
         }
         #coordinatesPositionContent {
@@ -443,7 +438,6 @@
             border-radius: 10px;
             color: #ffffff;
             box-shadow: 0 0 20px #00d4ff;
-            animation: slideInFromBottom 0.5s ease-in-out;
             text-align: center;
         }
         #closeCoordinatesPositionModal {
@@ -497,10 +491,155 @@
             background: rgba(0, 128, 0, 0.5); /* Green background to symbolize the field */
             position: relative;
         }
-        
+        #toggleStarMovement {
+            margin: 10px 0;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background: linear-gradient(135deg, #00d4ff, #007bff);
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        #toggleStarMovement:hover {
+            background: linear-gradient(135deg, #007bff, #00d4ff);
+            transform: scale(1.1);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+        }
+        .stars-container {
+            overflow: hidden;
+            position: fixed; /* Ensure the container is fixed */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0; /* Ensure stars are behind other elements */
+        }
+        .galaxy-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            display: none; /* Initially hidden */
+        }
+        .galaxy {
+            position: absolute;
+            width: 2000px;
+            height: 2000px;
+            background: radial-gradient(circle, rgb(120, 3, 77) 0%, rgba(47, 11, 144, 0) 70%);
+            border-radius: 50%;
+            animation: rotateGalaxy 60s linear infinite;
+            opacity: 0.5;
+        }
+        .galaxy::before, .galaxy::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            border-radius: inherit;
+            animation: inherit;
+            opacity: inherit;
+        }
+        .galaxy::before {
+            transform: rotate(120deg);
+        }
+        .galaxy::after {
+            transform: rotate(240deg);
+        }
+        .galaxy .star {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 10px white;
+        }
+        .galaxy .star:nth-child(odd) {
+            background: yellow;
+            box-shadow: 0 0 10px yellow;
+        }
+        .galaxy .star:nth-child(even) {
+            background: rgb(255, 255, 255);
+            box-shadow: 0 0 10px rgb(255, 0, 0);
+        }
+        @keyframes rotateGalaxy {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @media (max-width: 1200px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+            canvas {
+                width: 100%;
+                height: auto;
+            }
+            #coordinatesContainer {
+                position: static;
+                width: 100%;
+                margin-bottom: 2vw; /* Use relative units */
+            }
+            .left-container {
+                margin-right: 0;
+                margin-bottom: 2vw; /* Use relative units */
+                width: 100%; /* Make container responsive */
+                max-width: 90vw; /* Limit maximum width */
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+            #controls {
+                width: 100%;
+                padding: 1vw; /* Use relative units */
+            }
+            #controls button {
+                width: 100%;
+                font-size: 1.4vw; /* Use relative units */
+            }
+            .left-container button {
+                font-size: 3vw; /* Use relative units */
+                padding: 2vw 4vw; /* Use relative units */
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 1vw; /* Use relative units */
+            }
+            h1 {
+                font-size: 1.5em;
+            }
+            #coordinatesContainer {
+                font-size: 1.2vw; /* Use relative units */
+            }
+            #coordinates, #ballCoordinates, #robotCoordinates {
+                font-size: 1.2vw; /* Use relative units */
+            }
+            #controls button {
+                font-size: 1.2vw; /* Use relative units */
+                padding: 0.8vw; /* Use relative units */
+            }
+            .left-container button {
+                font-size: 2vw; /* Use relative units */
+                padding: 3vw 6vw; /* Use relative units */
+            }
+        }
     </style>
 </head>
 <body>
+    <div class="galaxy-container">
+        <div class="galaxy"></div>
+    </div>
     <header>
         
     </header>
@@ -524,8 +663,10 @@
             <button id="resetRobotsButton">Réinitialiser les Robots</button>
             <button id="toggleCircleButton">Afficher le cercle autour de la balle</button>
             <button id="coordinatesPositionButton">Placement des coordonnées</button>
+            <button id="toggleGalaxyButton">Afficher la galaxie</button>
         </div>
     </div>
+    <div class="stars-container"></div>
     <div id="outOfBoundsMessage">Balle en dehors du terrain</div>
     <div id="goalMessage">But!</div>
     <div id="mathFormulasModal">
@@ -560,6 +701,10 @@
             <input type="checkbox" id="toggleCircleCheckbox" name="toggleCircleCheckbox">
             <label for="circleColor">Couleur du cercle:</label>
             <input type="color" id="circleColor" name="circleColor" value="#ffffff">
+            <label for="galaxyColor">Couleur de la galaxie:</label>
+            <input type="color" id="galaxyColor" name="galaxyColor" value="#78034d">
+            <label for="toggleStarMovement">Mouvement des étoiles:</label>
+            <button id="toggleStarMovement">Pause</button>
         </div>
     </div>
     <div id="coordinatesPositionModal">
@@ -1056,6 +1201,7 @@
         const fieldColor2Input = document.getElementById('fieldColor2');
         const toggleCircleCheckbox = document.getElementById('toggleCircleCheckbox');
         const circleColorInput = document.getElementById('circleColor');
+        const galaxyColorInput = document.getElementById('galaxyColor');
 
         settingsButton.onclick = function() {
             settingsModal.style.display = 'block';
@@ -1121,18 +1267,29 @@
             window.location.href = 'https://birds-audiovisuel.fr/contact/';
         });
 
+        let starAnimationPaused = false;
+
         function createStars() {
             const starCount = 100;
+            const starsContainer = document.querySelector('.stars-container');
             for (let i = 0; i < starCount; i++) {
                 const star = document.createElement('div');
                 star.classList.add('star');
                 star.style.top = `${Math.random() * 100}%`;
                 star.style.left = `${Math.random() * 100}%`;
-                if ((parseFloat(star.style.top) < 20 || parseFloat(star.style.top) > 80) && (parseFloat(star.style.left) < 20 || parseFloat(star.style.left) > 80)) {
-                    document.body.appendChild(star);
-                }
+                star.style.animationDelay = `${Math.random() * 20}s`; // Add random delay to ensure continuous appearance
+                starsContainer.appendChild(star);
             }
         }
+
+        document.getElementById('toggleStarMovement').addEventListener('click', () => {
+            const stars = document.querySelectorAll('.star');
+            starAnimationPaused = !starAnimationPaused;
+            stars.forEach(star => {
+                star.style.animationPlayState = starAnimationPaused ? 'paused' : 'running';
+            });
+            document.getElementById('toggleStarMovement').textContent = starAnimationPaused ? 'Play' : 'Pause';
+        });
 
         const coordinatesContainer = document.getElementById('coordinatesContainer');
         const positions = [
@@ -1140,7 +1297,7 @@
             { top: '420px', left: '210px' },
             { top: '420px', left: '1170px' },
             { top: '10px', left: '1170px' },
-            { top: '240px', left: '200px' },
+            { top: '240px', left: '210px' },
             { top: '240px', left: '1170px' },
             { container: 'left-container', height: '400%' }
         ];
@@ -1197,7 +1354,7 @@
         const defaultContainer = document.querySelector(`.${defaultPos.container}`);
         coordinatesContainer.style.width = '100%';
         coordinatesContainer.style.position = 'relative';
-        coordinatesContainer.style.top = 'auto';
+        coordinatesContainer.style.top = '10px';
         coordinatesContainer.style.left = 'auto';
         defaultContainer.appendChild(coordinatesContainer);
         coordinatesContainer.classList.add('position-7');
@@ -1205,8 +1362,28 @@
         // Initial draw
         fetchLatestPositions();
         requestAnimationFrame(animationLoop);
-        createStars(); // Add this line to create stars
-        createStands(); // Add this line to create stands
+        createStars(); // Ensure stars are created
+        createGalaxy(); // Ensure galaxy is created
+
+        function createGalaxy() {
+            const galaxyContainer = document.querySelector('.galaxy-container');
+            const galaxy = document.createElement('div');
+            galaxy.classList.add('galaxy');
+            galaxyContainer.appendChild(galaxy);
+
+            // Add stars to the galaxy
+            const starCount = 900;
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                star.style.top = `${Math.random() * 90}%`;
+                star.style.left = `${Math.random() * 90}%`;
+                galaxy.appendChild(star);
+            }
+        }
+
+        // Call createGalaxy to initialize the galaxy
+        createGalaxy();
 
         // Clean up animation frame on page unload
         window.addEventListener('beforeunload', () => {
@@ -1215,6 +1392,18 @@
 
         // Remove the setInterval call
         // setInterval(fetchLatestPositions, 1000);
+
+        document.getElementById('toggleGalaxyButton').addEventListener('click', () => {
+            const galaxyContainer = document.querySelector('.galaxy-container');
+            const isVisible = galaxyContainer.style.display === 'block';
+            galaxyContainer.style.display = isVisible ? 'none' : 'block';
+            document.getElementById('toggleGalaxyButton').textContent = isVisible ? 'Afficher la galaxie' : 'Masquer la galaxie';
+        });
+
+        galaxyColorInput.oninput = function() {
+            const galaxy = document.querySelector('.galaxy');
+            galaxy.style.background = `radial-gradient(circle, ${galaxyColorInput.value} 0%, rgba(47, 11, 144, 0) 70%)`;
+        };
     </script>
 </body>
 <footer>
