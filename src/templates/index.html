@@ -37,10 +37,11 @@
             border: 0.2vw solid #00d4ff; /* Use relative units */
             border-radius: 1vw; /* Use relative units */
             box-shadow: 0 0 2vw #00d4ff; /* Use relative units */
-            width: 100%; /* Make canvas responsive */
-            height: auto; /* Maintain aspect ratio */
-            max-width: 90vw; /* Limit maximum width */
-            max-height: 50vh; /* Limit maximum height */
+            /* Make canvas responsive */
+            width: 100%;
+            height: 100%;
+            max-height: calc((6/12) * 80vw);
+            max-width: calc((12/6) * 90vh);
         }
         #controls {
             display: flex;
@@ -578,8 +579,7 @@
                 align-items: center;
             }
             canvas {
-                width: 100%;
-                height: auto;
+                margin: auto;
             }
             #coordinatesContainer {
                 position: static;
@@ -781,13 +781,19 @@
         const robotStatus = document.getElementById('robotStatus');
 
         function convertCoords(x, y, toCanvas = false) {
+            const rect = canvas.getBoundingClientRect(); // Get the size of the canvas
+            const scaleX = canvas.width / rect.width; // Determine the scale factor for the x-coordinate
+            const scaleY = canvas.height / rect.height; //And for the y-coordinate
             const width = canvas.width;
             const height = canvas.height;
-            const scaleFactor = Math.min(width, height) / 2; // Adjust scale factor back to 1:1 scale
+            const scaleFactor = Math.min(width, height) / 2;
+
             if (toCanvas) {
                 return [(x * scaleFactor) + (width / 2), (y * -scaleFactor) + (height / 2)];
             } else {
-                return [(x - (width / 2)) / scaleFactor, ((height / 2) - y) / scaleFactor];
+                const adjustedX = x * scaleX;
+                const adjustedY = y * scaleY;
+                return [(adjustedX - (width / 2)) / scaleFactor, ((height / 2) - adjustedY) / scaleFactor];
             }
         }
 
@@ -1135,8 +1141,13 @@
                 // Check if a robot is clicked
                 const clickedRobot = robots.find(robot => {
                     const [rx, ry] = convertCoords(robot.pose[0], robot.pose[1], true);
-                    const distance = Math.sqrt((x - rx) ** 2 + (y - ry) ** 2);
-                    return distance < 25; // Assuming 25 pixels as the clickable radius
+                    // Scale the clickable radius based on the current scale of the canvas
+                    const scaleX = canvas.width / rect.width;
+                    const scaleY = canvas.height / rect.height;
+                    const scaledX = x * scaleX;
+                    const scaledY = y * scaleY;
+                    const distance = Math.sqrt((scaledX - rx) ** 2 + (scaledY - ry) ** 2);
+                    return distance < 25 * Math.min(scaleX, scaleY); // Scale the clickable radius and assuming 25 pixels as the clickable radius
                 });
 
                 if (clickedRobot) {
