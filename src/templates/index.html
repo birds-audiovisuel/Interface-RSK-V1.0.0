@@ -17,7 +17,7 @@
         }
         h1 {
             color: #00d4ff;
-            margin-bottom: 2vw; /* Use relative units */
+            margin-bottom: 7vw; /* Use relative units */
             font-size: 3vw; /* Use relative units */
             text-align: center;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
@@ -32,6 +32,7 @@
             position: relative; /* Ensure stars are not placed inside these containers */
             z-index: 1;
             flex-direction: row-reverse; /* Move control container to the right */
+            height: 100%; /* Adjust height */
         }
         canvas {
             background: radial-gradient(circle, #005800, #003300);
@@ -53,10 +54,10 @@
             padding: 2vw; /* Use relative units */
             border-radius: 1vw; /* Use relative units */
             box-shadow: 0 0 2vw #00d4ff; /* Use relative units */
-           
-            max-height: 80vh; /* Limit height to ensure all buttons are visible */
+            height: 100%; /* Match height to canvas */
+            max-height: none; /* Remove maximum height */
             width: 100%; /* Revert width */
-            max-width: 100%; /* Increase maximum width */
+            max-width: 10vw; /* Increase maximum width */
         }
         #controls button {
             margin: 0.5vw 0; /* Use relative units */
@@ -171,13 +172,13 @@
             color: #ff0000;
             text-align: center;
             position: absolute;
-            bottom: 50%;
-            left: 50%;
-            transform: translate(-50%, 50%);
-            width: 100%;
-            max-width: 1200px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            z-index: 0; /* Ensure message is in the foreground */
+            bottom: 2vw;
+            left: 2vw;
+            
+            width: 62.5vw;
+            max-width: 62.5vw;
+            text-shadow: 0.104vw 0.104vw 0.208vw rgba(0, 0, 0, 0.5);
+            z-index: 10; /* Ensure message is in the foreground */
         }
         #goalMessage {
             display: none;
@@ -185,13 +186,13 @@
             font-weight: bold;
             text-align: center;
             position: absolute;
-            bottom: 50%;
-            left: 50%;
-            transform: translate(-50%, 50%);
+            bottom: 2vw;
+            left: 2vw;
+            
             width: 100%;
             max-width: 1200px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            z-index: 0; /* Ensure message is in the foreground */
+            z-index: 10; /* Ensure message is in the foreground */
         }
         #settingsButton {
             margin: 10px 0;
@@ -271,7 +272,8 @@
             margin-bottom: 2vw; /* Use relative units */
             width: 30%; /* Increase width */
             max-width: 10vw; /* Increase maximum width */
-            height: -50%;
+            height: 100%; /* Match height to canvas */
+            max-height: none; /* Remove maximum height */
         }
         .left-container button {
             margin: 0.5vw 0; /* Use relative units */
@@ -595,6 +597,14 @@
                 width: 100%; /* Make container responsive */
                 max-width: 90vw; /* Limit maximum width */
             }
+            .controls {
+                width: 100%;
+                padding: 1vw; /* Use relative units */
+                margin-right: 0;
+                margin-bottom: 2vw; /* Use relative units */
+                height: 100%; /* Adjust height */
+                max-width: 90vw; /* Limit maximum width */
+            }
         }
 
         @media (max-width: 768px) {
@@ -604,6 +614,7 @@
             #controls {
                 width: 100%;
                 padding: 1vw; /* Use relative units */
+                height: 100%; /* Adjust height */
             }
             #controls button {
                 width: 100%;
@@ -640,6 +651,21 @@
                 font-size: 1.5em;
             }
         }
+        #coordinatesContainer.position-6 {
+            top: 8px;
+            left: -995px;
+            height: auto;
+            width: 60vw; /* Adjust width for horizontal layout */
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center; /* Center the text horizontally */
+            text-align: center; /* Center the text */
+        }
+        #coordinatesContainer.position-6 > div {
+            display: inline-block;
+            margin-right: 1vw; /* Add spacing between inline elements */
+        }
     </style>
 </head>
 <body>
@@ -662,8 +688,9 @@
         <div id="controls">
             <h2>Liens</h2>
             <button id="goToLesAmicalesButton">Les Amicales</button>
-            <button id="goToSimulateurRSKButton">Simulateur RSK</button>
             <button id="contactButton">Contact</button> <!-- Added Contact button -->
+            <button id="goToSimulateurRSKButton">Simulateur RSK</button>
+            
             <h2>Personalisation</h2>
             <button id="settingsButton">Choix des couleurs</button>
             <button id="coordinatesPositionButton">Affichage des coordonnées</button>
@@ -684,13 +711,13 @@
             <span id="closeModal">&times;</span>
             <h2>Informations du Match</h2>
             <ul>
-                <li>Game is running: {{ referee_data.game_is_running }}</li>
-                <li>Game paused: {{ referee_data.game_paused }}</li>
-                <li>Halftime is running: {{ referee_data.halftime_is_running }}</li>
+                <li>Game en cours: {{ referee_data.game_is_running }}</li>
+                <li>Game sur pause: {{ referee_data.game_paused }}</li>
+                <li>Mi-temps en cours: {{ referee_data.halftime_is_running }}</li>
                 <li>Team Blue Score: {{ referee_data.teams_blue_score }}</li>
-                <li>Team Blue X Positive: {{ referee_data.teams_blue_x_positive }}</li>
+                <li>Team Blue du coté positif: {{ referee_data.teams_blue_x_positive }}</li>
                 <li>Team Green Score: {{ referee_data.teams_green_score }}</li>
-                <li>Team Green X Positive: {{ referee_data.teams_green_x_positive }}</li>
+                <li>Team Green du coté positif: {{ referee_data.teams_green_x_positive }}</li>
             </ul>
         </div>
     </div>
@@ -762,6 +789,14 @@
                     <div class="position-preview" data-position="4">
                         <div class="field-preview">
                             <div class="coordinates-window" style="top: 30%; left: 110%;"></div> <!-- Adjusted position -->
+                        </div>
+                    </div>
+                </div>
+                <div class="position-row">
+                    <span class="position-number">6</span>
+                    <div class="position-preview" data-position="5">
+                        <div class="field-preview">
+                            <div class="coordinates-window" style="top: 10%; left: 10%;"></div>
                         </div>
                     </div>
                 </div>
@@ -941,7 +976,9 @@
             if (isGoal) {
                 drawCircle(0, 0, 0.1, 'red', false);
                 goalMessage.style.display = 'block';
-                goalMessage.style.left = '50%'; // Center the message relative to the field
+                goalMessage.style.left = '10vw'; // Center the message relative to the field
+                goalMessage.style.bottom = '3vw'; // Adjust vertical position
+                goalMessage.style.zIndex = 10; // Ensure it is above other elements
                 goalMessage.style.color = ball[0] > 0.9 ? '#00FFFF' : '#7CFC00'; // Color based on which team scored
             } else {
                 goalMessage.style.display = 'none';
@@ -963,7 +1000,8 @@
                 });
                 drawCircle(nearestPoint[0], nearestPoint[1], 0.1, 'red', false);
                 outOfBoundsMessage.style.display = 'block';
-                outOfBoundsMessage.style.left = '13%'; // Center the message relative to the field
+                outOfBoundsMessage.style.left = '18.5vw'; // Center the message relative to the field
+                outOfBoundsMessage.style.bottom = '3vw'; // Pink color
             } else {
                 outOfBoundsMessage.style.display = 'none';
             }
@@ -976,7 +1014,7 @@
                 { color: 'blue', id: 2, pose: client.robot.blue[2].pose }
             ];
 
-            let robotCoordinatesText = 'Coordonnées des Robots:<br>';
+            let robotCoordinatesText = 'Coordonnées des Robots: ';
             robots.forEach(robot => {
                 const [x, y, orientation] = robot.pose;
                 const color = robot.color === 'green' ? '#7CFC00' : 'blue';  // Lighter green for green robots
@@ -999,9 +1037,9 @@
                 ctx.font = '20px Arial';
                 ctx.fillText(robot.id, ...convertCoords(x, y, true)); // Add robot number
 
-                robotCoordinatesText += `${robot.color} ${robot.id}: (${x.toFixed(2)}, ${y.toFixed(2)})<br>`;
+                robotCoordinatesText += `${robot.color} ${robot.id}: (${x.toFixed(2)}, ${y.toFixed(2)}), `;
             });
-            robotCoordinatesDisplay.innerHTML = robotCoordinatesText;
+            robotCoordinatesDisplay.innerHTML = robotCoordinatesText.slice(0, -2); // Remove the last comma and space
 
             if (showCircle) {
                 drawCircle(client.ball[0], client.ball[1], 0.25, circleColor, false);
@@ -1011,7 +1049,7 @@
         let client = { ball: [0, 0], robot: { green: { 1: { pose: [0, 0, 0] }, 2: { pose: [0, 0, 0] } }, blue: { 1: { pose: [0, 0, 0] }, 2: { pose: [0, 0, 0] } } } };
 
         function fetchLatestPositions() {
-            fetch('/outils/maths/update_field')
+            fetch('/update_field') // /outils/maths/update_field
                 .then(response => response.json())
                 .then(data => {
                     client = data; // Update client data from server
@@ -1050,7 +1088,7 @@
         }
 
         function resetRobots() {
-            fetch('/outils/maths/reset_robots', {
+            fetch('/reset_robots', { // /outils/maths/reset_robots
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -1069,7 +1107,7 @@
         let lastUpdateTime = 0;
 
         function animationLoop(timestamp) {
-            if (timestamp - lastUpdateTime >= 1000) { // Update every 1000ms (1 second) for 1 FPS
+            if (timestamp - lastUpdateTime >= 1) { // Update every 1000ms (1 second) for 1 FPS
                 fetchLatestPositions();
                 lastUpdateTime = timestamp;
             }
@@ -1128,7 +1166,7 @@
 
             if (selectedRobot) {
                 const { color, id } = selectedRobot;
-                fetch('/outils/maths/move_robot', {
+                fetch('/move_robot', { // /outils/maths/move_robot
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -1160,7 +1198,7 @@
                     selectedRobot = clickedRobot;
                     updateField(client); // Update field to show selected robot
                 } else {
-                    fetch('/outils/maths/teleport_ball', {
+                    fetch('/teleport_ball', { // /outils/maths/teleport_ball
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -1311,11 +1349,12 @@
 
         const coordinatesContainer = document.getElementById('coordinatesContainer');
         const positions = [
-            { top: '8px', left: '-995px', height:'20%' },
-            { top: '300px', left: '-995px' },
-            { top: '300px', left: '-205px' },
-            { top: '8px', left: '-205px' },
-            { container: 'left-container', height: '400%', top : '-20px' }
+            { top: '1vw', left: '-64vw', height:'10vw' },
+            { top: '19vw', left: '-64vw' },
+            { top: '19vw', left: '-15vw' },
+            { top: '1vw', left: '-15vw' },
+            { container: 'left-container', height: '400%', top : '-20px' },
+            { top: '-5vw', left: '-64.5vw', height: 'auto', width: '60vw' } // New position 6
         ];
 
         const coordinatesPositionButton = document.getElementById('coordinatesPositionButton');
@@ -1343,7 +1382,7 @@
                 previews.forEach(p => p.classList.remove('selected'));
                 event.currentTarget.classList.add('selected');
                 const pos = positions[position];
-                coordinatesContainer.classList.remove('position-5');
+                coordinatesContainer.classList.remove('position-5', 'position-6'); // Remove both classes
                 if (pos.container) {
                     const container = document.querySelector(`.${pos.container}`);
                     coordinatesContainer.style.width = '100%';
@@ -1354,11 +1393,14 @@
                     coordinatesContainer.classList.add('position-5');
                     coordinatesContainer.style.height = '400%'; // Ensure height is set correctly for position 5
                 } else {
-                    coordinatesContainer.style.width = '8vw'; // Further reduce width
-                    coordinatesContainer.style.height = '150px'; /* Increase the height */
+                    coordinatesContainer.style.width = pos.width || '8vw'; // Use width from pos or default
+                    coordinatesContainer.style.height = pos.height || '150px'; // Use height from pos or default
                     coordinatesContainer.style.position = 'absolute';
                     coordinatesContainer.style.top = pos.top;
                     coordinatesContainer.style.left = pos.left;
+                    if (position == 5) {
+                        coordinatesContainer.classList.add('position-6'); // Add class for position 6
+                    }
                 }
             });
         });
