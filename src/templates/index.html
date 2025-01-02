@@ -172,13 +172,13 @@
             color: #ff0000;
             text-align: center;
             position: absolute;
-            bottom: 50%;
-            left: 50%;
-            transform: translate(-50%, 50%);
-            width: 100%;
-            max-width: 1200px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            z-index: 0; /* Ensure message is in the foreground */
+            bottom: 2vw;
+            left: 2vw;
+            
+            width: 62.5vw;
+            max-width: 62.5vw;
+            text-shadow: 0.104vw 0.104vw 0.208vw rgba(0, 0, 0, 0.5);
+            z-index: 10; /* Ensure message is in the foreground */
         }
         #goalMessage {
             display: none;
@@ -186,13 +186,13 @@
             font-weight: bold;
             text-align: center;
             position: absolute;
-            bottom: 50%;
-            left: 50%;
-            transform: translate(-50%, 50%);
+            bottom: 2vw;
+            left: 2vw;
+            
             width: 100%;
             max-width: 1200px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            z-index: 0; /* Ensure message is in the foreground */
+            z-index: 10; /* Ensure message is in the foreground */
         }
         #settingsButton {
             margin: 10px 0;
@@ -976,7 +976,9 @@
             if (isGoal) {
                 drawCircle(0, 0, 0.1, 'red', false);
                 goalMessage.style.display = 'block';
-                goalMessage.style.left = '50%'; // Center the message relative to the field
+                goalMessage.style.left = '10vw'; // Center the message relative to the field
+                goalMessage.style.bottom = '3vw'; // Adjust vertical position
+                goalMessage.style.zIndex = 10; // Ensure it is above other elements
                 goalMessage.style.color = ball[0] > 0.9 ? '#00FFFF' : '#7CFC00'; // Color based on which team scored
             } else {
                 goalMessage.style.display = 'none';
@@ -998,7 +1000,8 @@
                 });
                 drawCircle(nearestPoint[0], nearestPoint[1], 0.1, 'red', false);
                 outOfBoundsMessage.style.display = 'block';
-                outOfBoundsMessage.style.left = '13%'; // Center the message relative to the field
+                outOfBoundsMessage.style.left = '18.5vw'; // Center the message relative to the field
+                outOfBoundsMessage.style.bottom = '3vw'; // Pink color
             } else {
                 outOfBoundsMessage.style.display = 'none';
             }
