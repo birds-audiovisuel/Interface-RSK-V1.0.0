@@ -28,6 +28,7 @@ def index():
 
 @app.route('/outils/maths/update_field', methods=['GET'])
 def update_field():
+    app.logger.info('update_field endpoint called')
     # Fetch the latest positions of the robots and the ball
     data = {
         'ball': list(client.ball),
@@ -43,6 +44,7 @@ def update_field():
         }
     }
     return jsonify(data)
+
 
 @app.route('/outils/maths/teleport_ball', methods=['POST'])
 def teleport_ball():
