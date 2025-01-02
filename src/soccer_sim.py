@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 client = rsk.Client('rsk.simulateur.les-amicales.fr')  
 
-@app.route('/')
+@app.route('/outils/maths/')
 def index():
     # Render the index page with the drawing and referee data
     drawing = draw_field()
