@@ -7,6 +7,5 @@ app_with_prefix = DispatcherMiddleware(Flask('dummy_app'), {
 })
 
 if __name__ == "__main__":
-    
     from werkzeug.serving import run_simple
-    run_simple("127.0.0.1", 7050, app_with_prefix)
+    run_simple('localhost', 4000, app_with_prefix)

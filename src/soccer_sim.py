@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, jsonify
 from src.drawing import draw_field  # Import the drawing function
 
 import os
-from tkinter import filedialog
+
 import rsk
 import math
 
@@ -26,7 +26,7 @@ def index():
     }
     return render_template('index.html', drawing=drawing, referee_data=referee_data)
 
-@app.route('/update_field', methods=['GET'])
+@app.route('/outils/maths/update_field', methods=['GET'])
 def update_field():
     # Fetch the latest positions of the robots and the ball
     data = {
@@ -44,14 +44,14 @@ def update_field():
     }
     return jsonify(data)
 
-@app.route('/teleport_ball', methods=['POST'])
+@app.route('/outils/maths/teleport_ball', methods=['POST'])
 def teleport_ball():
     data = request.get_json()
     x, y = data['x'], data['y']
     client.teleport_ball(x, y)  # Teleport ball to (x, y)
     return jsonify(success=True)
 
-@app.route('/move_robot', methods=['POST'])
+@app.route('/outils/maths/move_robot', methods=['POST'])
 def move_robot():
     data = request.get_json()
     color, id = data['color'], data['id']
@@ -59,7 +59,7 @@ def move_robot():
     client.robots[color][id].goto((x, y, alpha), wait=True)  # Move robot to (x, y, alpha)
     return jsonify(success=True)
 
-@app.route('/reset_robots', methods=['POST'])
+@app.route('/outils/maths/reset_robots', methods=['POST'])
 def reset_robots():
     positions = {
         'green': {1: [0.46, 0, 180], 2: [0.92, 0, 180]},
@@ -71,14 +71,7 @@ def reset_robots():
             client.teleport_ball(0, 0)
     return jsonify(success=True)
 
-@app.route('/save_text', methods=['POST'])
-def save_text():
-    text = request.form['text']
-    file_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text files", "*.txt"), ("All files", "*.*")])
-    if file_path:
-        with open(file_path, "w") as file:
-            file.write(text)
-    return jsonify(success=True)
+
 
 
 
