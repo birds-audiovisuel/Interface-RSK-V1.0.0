@@ -1069,7 +1069,7 @@
         let lastUpdateTime = 0;
 
         function animationLoop(timestamp) {
-            if (timestamp - lastUpdateTime >= 1000) { // Update every 1000ms (1 second) for 1 FPS
+            if (timestamp - lastUpdateTime >= 1) { // Update every 1000ms (1 second) for 1 FPS
                 fetchLatestPositions();
                 lastUpdateTime = timestamp;
             }
