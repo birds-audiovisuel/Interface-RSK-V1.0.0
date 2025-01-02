@@ -376,19 +376,13 @@
             height: auto; /* Adjust height to fit content */
             width: 12vw; /* Reduce width */
         }
-        #coordinatesContainer.position-7 {
-            width: 20%;
-            height: auto; /* Adjust height to fit content */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        #coordinatesContainer.position-7 > div {
+        
+        #coordinatesContainer.position-5 > div {
             width: 78%; /* Adjust width of inner divs */
             margin-bottom: 1vw; /* Add spacing between divs */
         }
-        #coordinatesContainer:not(.position-7) {
-            width: 12vw; /* Reduce width */
+        #coordinatesContainer:not(.position-5) {
+            width: 8vw; /* Further reduce width */
             height: auto; /* Adjust height to fit content */
         }
         #coordinates, #ballCoordinates, #robotCoordinates {
@@ -674,7 +668,7 @@
             <button id="toggleGalaxyButton">Afficher la galaxie</button>
         </div>
     </div>
-    <div id="coordinatesContainer" class="position-7">
+    <div id="coordinatesContainer" class="position-5">
         <div id="coordinates">Coordonnées: (0,0)</div>
         <div id="ballCoordinates">Coordonnées du Ballon: (0, 0)</div>
         <div id="robotCoordinates">Coordonnées des Robots:</div>
@@ -763,23 +757,7 @@
                     <span class="position-number">5</span>
                     <div class="position-preview" data-position="4">
                         <div class="field-preview">
-                            <div class="coordinates-window" style="top: 50%; left: 10%;"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="position-row">
-                    <span class="position-number">6</span>
-                    <div class="position-preview" data-position="5">
-                        <div class="field-preview">
-                            <div class="coordinates-window" style="top: 50%; left: 90%;"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="position-row">
-                    <span class="position-number">7</span>
-                    <div class="position-preview" data-position="6">
-                        <div class="field-preview">
-                            <div class="coordinates-window" style="top: 30%; left: 50%;"></div>
+                            <div class="coordinates-window" style="top: 30%; left: 110%;"></div> <!-- Adjusted position -->
                         </div>
                     </div>
                 </div>
@@ -1329,12 +1307,10 @@
 
         const coordinatesContainer = document.getElementById('coordinatesContainer');
         const positions = [
-            { top: '8px', left: '200px' },
-            { top: '420px', left: '210px' },
-            { top: '420px', left: '1170px' },
-            { top: '10px', left: '1170px' },
-            { top: '240px', left: '210px' },
-            { top: '240px', left: '1170px' },
+            { top: '8px', left: '-995px', height:'20%' },
+            { top: '300px', left: '-995px' },
+            { top: '300px', left: '-205px' },
+            { top: '8px', left: '-205px' },
             { container: 'left-container', height: '400%' }
         ];
 
@@ -1363,7 +1339,7 @@
                 previews.forEach(p => p.classList.remove('selected'));
                 event.currentTarget.classList.add('selected');
                 const pos = positions[position];
-                coordinatesContainer.classList.remove('position-7');
+                coordinatesContainer.classList.remove('position-5');
                 if (pos.container) {
                     const container = document.querySelector(`.${pos.container}`);
                     coordinatesContainer.style.width = '100%';
@@ -1371,10 +1347,10 @@
                     coordinatesContainer.style.top = 'auto';
                     coordinatesContainer.style.left = 'auto';
                     container.appendChild(coordinatesContainer);
-                    coordinatesContainer.classList.add('position-7');
-                    coordinatesContainer.style.height = '400%'; // Ensure height is set correctly for position 7
+                    coordinatesContainer.classList.add('position-5');
+                    coordinatesContainer.style.height = '400%'; // Ensure height is set correctly for position 5
                 } else {
-                    coordinatesContainer.style.width = '200px';
+                    coordinatesContainer.style.width = '8vw'; // Further reduce width
                     coordinatesContainer.style.height = '150px'; /* Increase the height */
                     coordinatesContainer.style.position = 'absolute';
                     coordinatesContainer.style.top = pos.top;
@@ -1383,8 +1359,8 @@
             });
         });
 
-        // Set default position to 7
-        const defaultPosition = 6;
+        // Set default position to 5
+        const defaultPosition = 4;
         previews[defaultPosition].classList.add('selected');
         const defaultPos = positions[defaultPosition];
         const defaultContainer = document.querySelector(`.${defaultPos.container}`);
@@ -1393,7 +1369,7 @@
         coordinatesContainer.style.top = '10px';
         coordinatesContainer.style.left = 'auto';
         defaultContainer.appendChild(coordinatesContainer);
-        coordinatesContainer.classList.add('position-7');
+        coordinatesContainer.classList.add('position-5');
 
         // Initial draw
         fetchLatestPositions();
