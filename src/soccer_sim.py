@@ -26,7 +26,7 @@ def index():
     }
     return render_template('index.html', drawing=drawing, referee_data=referee_data)
 
-@app.route('/outils/maths/update_field', methods=['GET'])
+@app.route('/update_field', methods=['GET']) #/outils/maths/update_field
 def update_field():
     app.logger.info('update_field endpoint called')
     # Fetch the latest positions of the robots and the ball
@@ -46,14 +46,14 @@ def update_field():
     return jsonify(data)
 
 
-@app.route('/outils/maths/teleport_ball', methods=['POST'])
+@app.route('/teleport_ball', methods=['POST']) #/outils/maths/teleport_ball
 def teleport_ball():
     data = request.get_json()
     x, y = data['x'], data['y']
     client.teleport_ball(x, y)  # Teleport ball to (x, y)
     return jsonify(success=True)
 
-@app.route('/outils/maths/move_robot', methods=['POST'])
+@app.route('/move_robot', methods=['POST']) #/outils/maths/move_robot
 def move_robot():
     data = request.get_json()
     color, id = data['color'], data['id']
@@ -61,7 +61,7 @@ def move_robot():
     client.robots[color][id].goto((x, y, alpha), wait=True)  # Move robot to (x, y, alpha)
     return jsonify(success=True)
 
-@app.route('/outils/maths/reset_robots', methods=['POST'])
+@app.route('/reset_robots', methods=['POST']) #/outils/maths/reset_robots
 def reset_robots():
     positions = {
         'green': {1: [0.46, 0, 180], 2: [0.92, 0, 180]},
