@@ -1049,7 +1049,7 @@
         let client = { ball: [0, 0], robot: { green: { 1: { pose: [0, 0, 0] }, 2: { pose: [0, 0, 0] } }, blue: { 1: { pose: [0, 0, 0] }, 2: { pose: [0, 0, 0] } } } };
 
         function fetchLatestPositions() {
-            fetch('/update_field') // /outils/maths/update_field
+            fetch('/outils/maths/update_field') // /outils/maths/update_field
                 .then(response => response.json())
                 .then(data => {
                     client = data; // Update client data from server
@@ -1088,7 +1088,7 @@
         }
 
         function resetRobots() {
-            fetch('/reset_robots', { // /outils/maths/reset_robots
+            fetch('/outils/maths/reset_robots', { // /outils/maths/reset_robots
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -1166,7 +1166,7 @@
 
             if (selectedRobot) {
                 const { color, id } = selectedRobot;
-                fetch('/move_robot', { // /outils/maths/move_robot
+                fetch('/outils/maths/move_robot', { // /outils/maths/move_robot
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -1198,7 +1198,7 @@
                     selectedRobot = clickedRobot;
                     updateField(client); // Update field to show selected robot
                 } else {
-                    fetch('/teleport_ball', { // /outils/maths/teleport_ball
+                    fetch('/outils/maths/teleport_ball', { // /outils/maths/teleport_ball
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
