@@ -118,6 +118,8 @@
             height: 100%;
             overflow: auto;
             background-color: rgba(0, 0, 0, 0.8);
+            -webkit-backdrop-filter: blur(5px);
+
             backdrop-filter: blur(5px);
         }
         #mathFormulasContent {
@@ -805,6 +807,14 @@
     </div>
     <div id="robotStatus"></div>
     <script>
+        // Load environment variables
+        const env = {
+            UPDATE_FIELD_ROUTE: '/outils/maths/update_field',
+            RESET_ROBOTS_ROUTE: '/outils/maths/reset_robots',
+            MOVE_ROBOT_ROUTE: '/outils/maths/move_robot',
+            TELEPORT_BALL_ROUTE: '/outils/maths/teleport_ball'
+        };
+
         const canvas = document.getElementById('soccerField');
         const ctx = canvas.getContext('2d');
         const coordinatesDisplay = document.getElementById('coordinates');
@@ -1049,7 +1059,7 @@
         let client = { ball: [0, 0], robot: { green: { 1: { pose: [0, 0, 0] }, 2: { pose: [0, 0, 0] } }, blue: { 1: { pose: [0, 0, 0] }, 2: { pose: [0, 0, 0] } } } };
 
         function fetchLatestPositions() {
-            fetch('/update_field') // /outils/maths/update_field
+            fetch(env.UPDATE_FIELD_ROUTE)
                 .then(response => response.json())
                 .then(data => {
                     client = data; // Update client data from server
@@ -1088,7 +1098,7 @@
         }
 
         function resetRobots() {
-            fetch('/reset_robots', { // /outils/maths/reset_robots
+            fetch(env.RESET_ROBOTS_ROUTE, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -1166,7 +1176,7 @@
 
             if (selectedRobot) {
                 const { color, id } = selectedRobot;
-                fetch('/move_robot', { // /outils/maths/move_robot
+                fetch(env.MOVE_ROBOT_ROUTE, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -1198,7 +1208,7 @@
                     selectedRobot = clickedRobot;
                     updateField(client); // Update field to show selected robot
                 } else {
-                    fetch('/teleport_ball', { // /outils/maths/teleport_ball
+                    fetch(env.TELEPORT_BALL_ROUTE, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
